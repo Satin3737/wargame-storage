@@ -1,0 +1,35 @@
+@use 'reboot';
+@use 'helper' as h;
+@use 'responsive' as r;
+
+:root {
+    --c-primary: #7fffd4;
+    --c-accent: #3276ff;
+    --c-white: #ffffff;
+    --c-red: #db4e38;
+    --c-yellow: #ffc107;
+    --c-green: #38db64;
+    --c-shade-1: #0e1b35;
+    --c-shade-2: #14274d;
+    --c-shade-3: #465677;
+    --c-shade-4: #8090b1;
+    --c-dark-blue: #03112d;
+    --c-accent-bg: #050e21;
+}
+
+html {
+    overflow-x: clip;
+    @include h.customScrollBar;
+}
+
+body {
+    font-family: var(--f-geist-sans), sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    background: var(--c-dark-blue);
+    color: var(--c-white);
+    min-height: 100dvh;
+}

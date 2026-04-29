@@ -1,0 +1,47 @@
+@mixin responsiveBelow($width) {
+    @media (max-width: #{$width}) {
+        @content;
+    }
+}
+
+@mixin responsiveAbove($width) {
+    @media (min-width: #{$width}) {
+        @content;
+    }
+}
+
+@mixin responsiveBelowHeight($height) {
+    @media (max-height: #{$height}) {
+        @content;
+    }
+}
+
+@mixin responsiveAboveHeight($height) {
+    @media (min-height: #{$height}) {
+        @content;
+    }
+}
+
+@mixin responsiveBetween($minWidth, $maxWidth) {
+    @media (min-width: #{$minWidth}) and (max-width: #{$maxWidth}) {
+        @content;
+    }
+}
+
+@mixin responsiveBetweenHeight($minHeight, $maxHeight) {
+    @media (min-height: #{$minHeight}) and (max-height: #{$maxHeight}) {
+        @content;
+    }
+}
+
+@mixin responsiveBelowContainer($width) {
+    @container (max-width: #{$width}) {
+        @content;
+    }
+}
+
+@mixin responsiveAboveContainer($width) {
+    @container (min-width: #{$width}) {
+        @content;
+    }
+}

@@ -1,0 +1,71 @@
+@mixin cropToLines($rows) {
+    display: -webkit-box;
+    -webkit-line-clamp: $rows;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@mixin cropTextToWidth($width: none) {
+    max-width: $width;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin hideScrollBar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@mixin customScrollBar {
+    scroll-behavior: smooth;
+    scrollbar-color: var(--c-shade-3) var(--c-dark-blue);
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: var(--c-dark-blue);
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--c-shade-3);
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-button:decrement,
+    &::-webkit-scrollbar-button:increment {
+        display: none;
+    }
+}
+
+@mixin mediaHover {
+    @media (hover: hover) {
+        @content;
+    }
+}
+
+@mixin visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: none;
+    background: none;
+    padding: 0;
+    opacity: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+}

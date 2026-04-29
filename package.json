@@ -1,25 +1,40 @@
 {
-  "name": "wargame-storage",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "next": "16.2.4",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "babel-plugin-react-compiler": "1.0.0",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.4",
-    "typescript": "^5"
-  }
+    "$schema": "https://json.schemastore.org/package.json",
+    "name": "wargame-storage",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "eslint",
+        "format": "prettier --write --config .prettierrc.ts \"./**/*.{ts,tsx,js,jsx,css,scss,json,html}\""
+    },
+    "dependencies": {
+        "@phosphor-icons/react": "^2.1.10",
+        "axios": "^1.15.2",
+        "clsx": "^2.1.1",
+        "date-fns": "^4.1.0",
+        "dexie": "^4.4.2",
+        "dexie-export-import": "^4.4.0",
+        "dexie-react-hooks": "^4.4.0",
+        "next": "16.2.4",
+        "react": "19.2.5",
+        "react-dom": "19.2.5",
+        "react-toastify": "^11.1.0",
+        "zod": "^4.3.6",
+        "zustand": "^5.0.12"
+    },
+    "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+        "@types/node": "^25.6.0",
+        "@types/react": "^19.2.14",
+        "@types/react-dom": "^19.2.3",
+        "babel-plugin-react-compiler": "1.0.0",
+        "eslint": "^10.2.1",
+        "eslint-config-next": "16.2.4",
+        "prettier": "^3.8.3",
+        "sass": "^1.99.0",
+        "typescript": "^6.0.3"
+    }
 }
