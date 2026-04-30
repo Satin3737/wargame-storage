@@ -11,9 +11,15 @@ const config: Config = {
     arrowParens: 'avoid',
     importOrder: [
         '<THIRD_PARTY_MODULES>',
-        '^@/types(.*)$',
+        '^@/app(.*)$',
+        '^@/db(.*)$',
+        '^@/constants(.*)$',
+        '^@/schemas(.*)$',
+        '^@/services(.*)$',
+        '^@/hooks(.*)$',
+        '^@/components(.*)$',
+        '^@/styles(.*)$',
         '^@/(.*)$',
-        '^[./(.*)$]',
         '^(?!.*\\.module\\.scss$)[./].*$',
         '.*\\.module\\.scss$'
     ],
