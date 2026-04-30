@@ -11,6 +11,7 @@ const customEsLintSettings: Linter.RulesRecord = {
     ],
     '@typescript-eslint/no-explicit-any': ['error', {ignoreRestArgs: true}],
     '@typescript-eslint/no-duplicate-enum-values': 'off',
+    '@next/next/no-img-element': 'off',
     '@typescript-eslint/member-ordering': [
         'warn',
         {
@@ -36,9 +37,7 @@ const eslintConfig = defineConfig([
     ...nextTs,
     globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
     {
-        languageOptions: {
-            rules: customEsLintSettings
-        }
+        rules: customEsLintSettings
     }
 ]);
 
