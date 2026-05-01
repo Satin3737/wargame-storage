@@ -1,0 +1,13 @@
+.spinner {
+    display: inline-block;
+    border: 2px solid color-mix(in srgb, var(--c-primary) 30%, transparent);
+    border-top-color: var(--c-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

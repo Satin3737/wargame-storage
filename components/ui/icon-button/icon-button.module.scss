@@ -1,0 +1,43 @@
+@use '@/styles/helper' as h;
+
+.iconButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--c-shade-2);
+    background: var(--c-shade-1);
+    color: var(--c-white);
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+
+    @include h.mediaHover {
+        &:hover:not(:disabled) {
+            background: var(--c-shade-2);
+            border-color: var(--c-shade-3);
+        }
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.92);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+.sm {
+    width: 32px;
+    height: 32px;
+}
+
+.md {
+    width: 40px;
+    height: 40px;
+}

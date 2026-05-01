@@ -1,0 +1,86 @@
+@use '@/styles/helper' as h;
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        opacity 0.15s ease;
+    user-select: none;
+    line-height: 1;
+
+    > svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.97);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.md {
+    padding: 12px 16px;
+    font-size: 16px;
+    min-height: 44px;
+}
+
+.lg {
+    padding: 16px 20px;
+    font-size: 16px;
+    min-height: 52px;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.primary {
+    background: var(--c-primary);
+    color: var(--c-dark-blue);
+
+    @include h.mediaHover {
+        &:hover:not(:disabled) {
+            background: color-mix(in srgb, var(--c-primary) 88%, white);
+        }
+    }
+}
+
+.ghost {
+    background: var(--c-shade-1);
+    color: var(--c-white);
+    border-color: var(--c-shade-2);
+
+    @include h.mediaHover {
+        &:hover:not(:disabled) {
+            background: var(--c-shade-2);
+        }
+    }
+}
+
+.danger {
+    background: transparent;
+    color: var(--c-red);
+    border-color: var(--c-red);
+
+    @include h.mediaHover {
+        &:hover:not(:disabled) {
+            background: color-mix(in srgb, var(--c-red) 12%, transparent);
+        }
+    }
+}
