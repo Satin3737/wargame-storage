@@ -1,6 +1,6 @@
 'use client';
 
-import {BarcodeIcon, FloppyDiskIcon, TrashIcon, XIcon} from '@phosphor-icons/react/dist/ssr';
+import {BarcodeIcon, CopyIcon, FloppyDiskIcon, TrashIcon, XIcon} from '@phosphor-icons/react/dist/ssr';
 import {useRouter} from 'next/navigation';
 import {type FC, useState} from 'react';
 import {z} from 'zod';
@@ -153,6 +153,17 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
         }
     };
 
+    const handleCopy = () => {
+        try {
+            void navigator.clipboard.writeText(barcodeInput.trim());
+            hapticsService.success();
+            toastService.success('Скопировано в буфер обмена');
+        } catch (_) {
+            hapticsService.error();
+            toastService.error('Не удалось скопировать');
+        }
+    };
+
     return (
         <form
             className={styles.form}
@@ -181,6 +192,9 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                             {lookupBusy && <Spinner size={20} />}
                             {'Поиск'}
                         </Button>
+                        <IconButton disabled={!barcodeInput} onClick={handleCopy} aria-label={'copy'}>
+                            <CopyIcon size={20} />
+                        </IconButton>
                         <IconButton onClick={() => setScannerOpen(true)} aria-label={'scan'}>
                             <BarcodeIcon size={20} />
                         </IconButton>
