@@ -11,12 +11,15 @@ class BarcodeLookupService {
         const trimmed = barcode.trim();
         if (!trimmed) return {kind: 'not-found'};
 
+        let rateLimited = false;
+
         for (const provider of this.providers) {
             const result = await provider.lookup(trimmed);
             if (result.kind === 'found') return result;
+            if (result.kind === 'rate-limited') rateLimited = true;
         }
 
-        return {kind: 'not-found'};
+        return rateLimited ? {kind: 'rate-limited'} : {kind: 'not-found'};
     }
 }
 
