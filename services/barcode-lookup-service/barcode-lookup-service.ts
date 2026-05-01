@@ -3,7 +3,7 @@ import type {IBarcodeLookupProvider, IUpcLookupResult} from './types';
 class BarcodeLookupService {
     private readonly providers: IBarcodeLookupProvider[];
 
-    constructor(providers: IBarcodeLookupProvider[]) {
+    public constructor(providers: IBarcodeLookupProvider[]) {
         this.providers = providers;
     }
 

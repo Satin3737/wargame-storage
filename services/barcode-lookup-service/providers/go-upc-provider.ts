@@ -6,7 +6,7 @@ export class GoUpcProvider implements IBarcodeLookupProvider {
     private readonly endpoint = 'https://go-upc.com/api/v1/code';
     private readonly apiKey: string;
 
-    constructor(apiKey: string) {
+    public constructor(apiKey: string) {
         this.apiKey = apiKey;
     }
 

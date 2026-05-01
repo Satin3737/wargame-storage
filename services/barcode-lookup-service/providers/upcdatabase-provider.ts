@@ -6,7 +6,7 @@ export class UpcDatabaseProvider implements IBarcodeLookupProvider {
     private readonly endpoint = 'https://api.upcdatabase.org/product';
     private readonly apiKey: string;
 
-    constructor(apiKey: string) {
+    public constructor(apiKey: string) {
         this.apiKey = apiKey;
     }
 
