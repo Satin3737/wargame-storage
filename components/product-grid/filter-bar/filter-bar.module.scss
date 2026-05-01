@@ -1,0 +1,25 @@
+.bar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    background: var(--c-shade-1);
+    border: 1px solid var(--c-shade-2);
+    border-radius: 14px;
+}
+
+.search {
+    width: 100%;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 64px;
+    gap: 8px;
+}
+
+.category,
+.sortKey,
+.sortDir {
+    min-width: 0;
+}

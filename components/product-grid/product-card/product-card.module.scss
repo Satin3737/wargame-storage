@@ -1,0 +1,141 @@
+@use '@/styles/helper' as h;
+@use '@/styles/responsive' as r;
+
+.card {
+    display: grid;
+    grid-template-columns: 56px 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    background: var(--c-shade-1);
+    border: 1px solid var(--c-shade-2);
+    border-radius: 16px;
+    padding: 12px;
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+
+    @include h.mediaHover {
+        &:hover {
+            border-color: var(--c-shade-3);
+        }
+    }
+}
+
+.photoBtn {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--c-accent-bg);
+    border: 1px solid var(--c-shade-2);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photoPlaceholder {
+    color: var(--c-shade-3);
+    font-size: 16px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--c-white);
+    @include h.cropTextToWidth(100%);
+}
+
+.meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.category {
+    font-size: 12px;
+    color: var(--c-primary);
+    background: color-mix(in srgb, var(--c-primary) 12%, transparent);
+    padding: 4px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 600;
+}
+
+.id {
+    font-size: 12px;
+    color: var(--c-shade-3);
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    @include h.cropTextToWidth(100%);
+}
+
+.qtyBlock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qty {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--c-primary);
+    min-width: 32px;
+    text-align: center;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.editLink {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--c-shade-2);
+    background: var(--c-shade-1);
+    color: var(--c-white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease;
+
+    @include h.mediaHover {
+        &:hover {
+            background: var(--c-shade-2);
+            border-color: var(--c-shade-3);
+            color: var(--c-primary);
+        }
+    }
+}
+
+@include r.responsiveBelow(480px) {
+    .card {
+        grid-template-columns: 48px 1fr auto;
+    }
+
+    .editLink {
+        grid-column: 1 / -1;
+        width: 100%;
+        border-radius: 12px;
+        height: 32px;
+        gap: 8px;
+
+        &::after {
+            content: 'Редактировать';
+            font-size: 12px;
+        }
+    }
+}
