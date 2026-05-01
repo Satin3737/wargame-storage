@@ -22,15 +22,33 @@ No test framework is configured.
 
 ## Architecture
 
-App Router project. Top-level layout:
+A wargame shop inventory app (UI labels in Russian). Routes: `/` (product grid + filter), `/add`, `/edit/[id]`, `/export`.
 
-- `app/` — Next.js App Router entry (`layout.tsx`, `page.tsx`, route-colocated `*.module.scss`). Global `<html>`/`<body>` and the Geist font CSS variable (`--f-geist-sans`) live in `app/layout.tsx`.
-- `store/` — Zustand stores. `create-store.ts` exports a `createStore` factory that composes `persist` → `devtools` → `immer` middleware in that order; every store goes through it. `partializeInclude` / `partializeExclude` whitelist/blacklist persisted fields. `example-store.ts` is the canonical pattern (`IState` interface → `IStore` interface extending it with actions → `initialState` constant → `partialize` passed to `createStore`).
-- `styles/` — global SCSS (`general.scss` is imported once in `app/layout.tsx`; also `reboot`, `helper`, `responsive`).
-- `assets/`, `public/` — static assets.
-- Path alias `@/*` → repo root (e.g. `@/styles/general.scss`, `@/store/...`).
+### Layer overview
 
-Stack: **dexie** + `dexie-export-import` + `dexie-react-hooks` (IndexedDB) alongside zustand `persist` (localStorage); `zod` for validation, `axios` for HTTP, `react-toastify` for notifications, `@phosphor-icons/react` for icons, `date-fns`, `clsx`.
+- `app/` — App Router pages; route-colocated `*.module.scss`. Global `<html>`/`<body>` and the Geist font CSS variable (`--f-geist-sans`) live in `app/layout.tsx`. Pages are thin: they render layout shells and delegate to components.
+- `db/` — Dexie (IndexedDB) layer. `WargameDb` extends `Dexie` and owns the `products` table (indexed on `id, name, category, qty, updatedAt`). `ProductsService` (singleton `productsService`) is the only write path — `create`, `update`, `incrementQty`, `mergeWithExisting`, `remove`. `IProduct` / `IProductDraft` types live here too.
+- `hooks/` — `useLiveQuery`-based hooks (`useProduct`, `useProducts`, `useSimilarProducts`). All are `'use client'` and return live-reactive data from Dexie. `useProducts` accepts an `IProductsFilter` (category, search, sort, out-of-stock flag) and does client-side filtering/sorting. `useObjectUrl` manages a `URL.createObjectURL` lifecycle.
+- `schemas/` — Zod schemas: `productFormSchema` (validates add/edit form) and `upcResponseSchema` (validates UPC Item DB API responses).
+- `helpers/` — Pure utilities. `compareProducts` drives the sort in `useProducts`.
+- `services/` — Singleton service classes:
+  - `upcLookupService` — calls `api.upcitemdb.com` to resolve a barcode to a product name; returns a discriminated union `{kind: 'found'|'not-found'|'rate-limited'|'error'}`.
+  - `exportService` — builds an `.xlsx` via `exceljs` (dynamically imported) with embedded photos, then delivers it via the Web Share API (files) or a fallback `<a download>`.
+  - `toastService` — thin wrapper around `react-toastify`.
+  - `hapticsService` — vibration feedback.
+- `components/` — All client components. Organised as:
+  - `components/ui/` — design-system primitives (`Button`, `IconButton`, `TextInput`, `Select`, `Checkbox`, `Modal`, `Spinner`). Import from `@/components` barrel or the direct sub-path.
+  - `components/app-header/` — top bar with optional back link.
+  - `components/page-shell/` — scroll container that wraps every page body.
+  - `components/product-form/` — add/edit form. Uses React context (`form-context.ts`) + a custom hook (`form-hook.ts`) to share state across sub-components (`BarcodeScanner`, `PhotoField`, `CategoryField`, `NumberField`, `TextField`, `SubmitButton`, `SimilarProducts`). `ProductFormMode` enum selects create vs. edit behaviour.
+  - `components/product-grid/` — home-page grid. Contains `FilterBar`, `ProductCard`, and `PhotoModal`.
+  - `components/toast-host/` — mounts `<ToastContainer>`.
+- `constants/` — `Category` const-object + `ICategory` type + `CategoryValues` array + `CategoryLabel` Russian labels.
+- `store/` — Zustand stores (not yet used by the main feature code). `createStore` factory composes `persist` → `devtools` → `immer`; see `example-store.ts` for the canonical pattern.
+- `styles/` — global SCSS (`general.scss` imported once in `app/layout.tsx`; also `reboot`, `helper`, `responsive`).
+- Path alias `@/*` → repo root.
+
+Stack: **dexie** + `dexie-react-hooks` (IndexedDB); `zod`; `axios`; `exceljs` (dynamic import, xlsx export); `react-toastify`; `@phosphor-icons/react`; `clsx`.
 
 ## Code style (enforced by Prettier / ESLint)
 
