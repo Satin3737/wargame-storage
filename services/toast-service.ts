@@ -1,25 +1,16 @@
-import {type ToastOptions, toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 
 class ToastService {
-    private readonly baseOptions: ToastOptions = {
-        position: 'bottom-center',
-        theme: 'dark',
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true
-    };
-
     public success(message: string): void {
-        toast.success(message, this.baseOptions);
+        toast.success(message);
     }
 
     public error(message: string): void {
-        toast.error(message, this.baseOptions);
+        toast.error(message);
     }
 
     public info(message: string): void {
-        toast.info(message, this.baseOptions);
+        toast.info(message);
     }
 }
 

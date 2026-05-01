@@ -118,8 +118,10 @@ a {
     text-decoration: none;
 }
 
-a:hover {
-    color: inherit;
+@media (hover: hover) {
+    a:hover {
+        color: inherit;
+    }
 }
 
 a:not([href]):not([class]),
