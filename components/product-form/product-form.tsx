@@ -8,7 +8,7 @@ import {type IProduct, productsService} from '@/db';
 import {Category} from '@/constants';
 import {type IProductFormValues, productFormSchema} from '@/schemas';
 import {hapticsService, toastService, upcLookupService} from '@/services';
-import {BtnSize, BtnVariant, Button, IconButton, Spinner} from '@/components';
+import {BtnSize, BtnVariant, Button, ConfirmModal, IconButton, Spinner} from '@/components';
 import {BarcodeScanner} from './barcode-scanner';
 import {useAppForm} from './form-hook';
 import {SimilarProducts} from './similar-products';
@@ -27,8 +27,10 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
     const router = useRouter();
     const [scannerOpen, setScannerOpen] = useState(false);
     const [linkedExistingId, setLinkedExistingId] = useState<string | null>(initial?.id ?? null);
+    const [linkedName, setLinkedName] = useState<string | null>(initial?.name ?? null);
     const [lookupBusy, setLookupBusy] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [barcodeInput, setBarcodeInput] = useState(initial?.barcode ?? '');
 
     const form = useAppForm({
@@ -120,6 +122,7 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
 
     const handlePickExisting = (existing: IProduct) => {
         setLinkedExistingId(existing.id);
+        setLinkedName(existing.name);
 
         form.setFieldValue('name', existing.name);
         form.setFieldValue('category', existing.category);
@@ -136,7 +139,6 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
 
     const handleDelete = async () => {
         if (!initial) return;
-        if (!confirm(`Удалить «${initial.name}»?`)) return;
         setDeleting(true);
 
         try {
@@ -186,7 +188,18 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 </div>
             )}
 
-            <form.AppField name={'name'} validators={{onChange: z.string().trim().min(2, 'Минимум 2 символа')}}>
+            <form.AppField
+                name={'name'}
+                validators={{
+                    onChange: ({value}) => {
+                        if (linkedExistingId && value.trim() !== linkedName?.trim()) {
+                            setLinkedExistingId(null);
+                            setLinkedName(null);
+                        }
+                        return z.string().trim().min(2, 'Минимум 2 символа').safeParse(value).error?.issues[0]?.message;
+                    }
+                }}
+            >
                 {field => <field.TextField label={'Название'} placeholder={'Например, Catan'} />}
             </form.AppField>
 
@@ -195,6 +208,24 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                     <SimilarProducts query={nameValue} excludeId={initial?.id ?? null} onPick={handlePickExisting} />
                 )}
             </form.Subscribe>
+
+            {!!linkedExistingId && mode === ProductFormMode.create && (
+                <div className={styles.linked}>
+                    <span className={styles.linkedLabel}>
+                        {'Будет добавлено к: '}
+                        {linkedName}
+                    </span>
+                    <Button
+                        variant={BtnVariant.ghost}
+                        onClick={() => {
+                            setLinkedExistingId(null);
+                            setLinkedName(null);
+                        }}
+                    >
+                        {'Отвязать'}
+                    </Button>
+                </div>
+            )}
 
             <div className={styles.row}>
                 <form.AppField name={'qty'}>
@@ -213,7 +244,7 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 <form.AppForm>
                     <form.SubmitButton>
                         <FloppyDiskIcon size={20} />
-                        {linkedExistingId && mode === ProductFormMode.create ? 'Добавить к существующему' : 'Сохранить'}
+                        {'Сохранить'}
                     </form.SubmitButton>
                 </form.AppForm>
             </div>
@@ -223,13 +254,23 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                     variant={BtnVariant.danger}
                     size={BtnSize.lg}
                     fullWidth
-                    onClick={handleDelete}
+                    onClick={() => setConfirmDeleteOpen(true)}
                     disabled={deleting}
                 >
                     <TrashIcon size={20} />
                     {'Удалить товар'}
                 </Button>
             )}
+
+            <ConfirmModal
+                open={confirmDeleteOpen}
+                message={`Удалить «${initial?.name}»?`}
+                onConfirm={() => {
+                    setConfirmDeleteOpen(false);
+                    void handleDelete();
+                }}
+                onCancel={() => setConfirmDeleteOpen(false)}
+            />
 
             <BarcodeScanner
                 open={scannerOpen}

@@ -10,7 +10,7 @@ const AppHeader: FC<IAppHeaderProps> = ({title, backHref, rightSlot}) => (
         <div className={styles.left}>
             {!!backHref && (
                 <Link href={backHref} aria-label={'back'}>
-                    <IconButton aria-label={'back'}>
+                    <IconButton>
                         <ArrowLeftIcon size={20} />
                     </IconButton>
                 </Link>

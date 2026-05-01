@@ -1,7 +1,7 @@
 'use client';
 
 import {useLiveQuery} from 'dexie-react-hooks';
-import {IProduct, db} from '@/db';
+import {type IProduct, db} from '@/db';
 
 const useSimilarProducts = (query: string, excludeId?: string | null): IProduct[] =>
     useLiveQuery(

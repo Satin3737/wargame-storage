@@ -8,13 +8,13 @@ export const Category = {
 
 export type ICategory = (typeof Category)[keyof typeof Category];
 
-export const CategoryValues: ICategory[] = [
+export const CategoryValues = [
     Category.boardGames,
     Category.tinFigures,
     Category.miniatures,
     Category.modeling,
     Category.accessories
-];
+] as const satisfies ICategory[];
 
 export const CategoryLabel: Record<ICategory, string> = {
     [Category.boardGames]: 'Настольные игры',

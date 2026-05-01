@@ -1,5 +1,6 @@
 export * from './button';
 export * from './checkbox';
+export * from './confirm-modal';
 export * from './icon-button';
 export * from './modal';
 export * from './select';

@@ -1,3 +1,3 @@
 export * from './database';
-export * from './products-service';
+export {default as productsService} from './products-service';
 export * from './types';

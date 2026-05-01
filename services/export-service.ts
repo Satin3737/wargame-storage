@@ -34,9 +34,8 @@ class ExportService {
             row.height = 64;
 
             if (product.photoBlob) {
-                const buffer = await product.photoBlob.arrayBuffer();
-                const extension = this.detectExtension(product.photoBlob.type);
-                const imageId = workbook.addImage({buffer, extension});
+                const normalized = await this.normalizePhoto(product.photoBlob);
+                const imageId = workbook.addImage(normalized);
                 const rowNumber = row.number;
 
                 sheet.addImage(imageId, {
@@ -67,10 +66,20 @@ class ExportService {
         return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
     }
 
-    private detectExtension(mime: string): 'png' | 'jpeg' | 'gif' {
-        if (mime.includes('png')) return 'png';
-        if (mime.includes('gif')) return 'gif';
-        return 'jpeg';
+    private async normalizePhoto(blob: Blob): Promise<{buffer: ArrayBuffer; extension: 'png' | 'jpeg' | 'gif'}> {
+        const supported = blob.type.includes('webp') ? await this.transcodeTopng(blob) : blob;
+        const buffer = await supported.arrayBuffer();
+        const extension = supported.type.includes('png') ? 'png' : supported.type.includes('gif') ? 'gif' : 'jpeg';
+        return {buffer, extension};
+    }
+
+    private async transcodeTopng(blob: Blob): Promise<Blob> {
+        const bitmap = await createImageBitmap(blob);
+        const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return blob;
+        ctx.drawImage(bitmap, 0, 0);
+        return canvas.convertToBlob({type: 'image/png'});
     }
 
     private async deliver(blob: Blob, filename: string): Promise<void> {

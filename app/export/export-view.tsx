@@ -1,17 +1,18 @@
 'use client';
 
 import {DownloadSimpleIcon, FileXlsIcon, TrashIcon} from '@phosphor-icons/react/dist/ssr';
-import {useLiveQuery} from 'dexie-react-hooks';
 import {type FC, useState} from 'react';
-import {db} from '@/db';
+import {productsService} from '@/db';
 import {exportService, hapticsService, toastService} from '@/services';
-import {BtnSize, BtnVariant, Button, Spinner} from '@/components';
+import {useAllProducts} from '@/hooks';
+import {BtnSize, BtnVariant, Button, ConfirmModal, Spinner} from '@/components';
 import styles from './export-view.module.scss';
 
 const ExportView: FC = () => {
     const [busy, setBusy] = useState(false);
     const [clearing, setClearing] = useState(false);
-    const products = useLiveQuery(() => db.products.toArray(), []);
+    const [confirmClearOpen, setConfirmClearOpen] = useState(false);
+    const products = useAllProducts();
     const totalQty = products?.reduce((s, p) => s + p.qty, 0) ?? 0;
 
     const handleExport = async () => {
@@ -35,12 +36,10 @@ const ExportView: FC = () => {
     };
 
     const handleClear = async () => {
-        if (!confirm('Удалить все товары без возможности восстановления?')) return;
-
         setClearing(true);
 
         try {
-            await db.products.clear();
+            await productsService.clear();
             hapticsService.success();
             toastService.success('Очищено');
         } catch {
@@ -78,12 +77,22 @@ const ExportView: FC = () => {
                 variant={BtnVariant.danger}
                 size={BtnSize.lg}
                 fullWidth
-                onClick={handleClear}
+                onClick={() => setConfirmClearOpen(true)}
                 disabled={clearing || !products?.length}
             >
                 <TrashIcon size={20} />
                 {'Очистить весь склад'}
             </Button>
+            <ConfirmModal
+                open={confirmClearOpen}
+                message={'Удалить все товары без возможности восстановления?'}
+                confirmLabel={'Очистить'}
+                onConfirm={() => {
+                    setConfirmClearOpen(false);
+                    void handleClear();
+                }}
+                onCancel={() => setConfirmClearOpen(false)}
+            />
         </div>
     );
 };

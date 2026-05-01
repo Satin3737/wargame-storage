@@ -57,6 +57,25 @@
     }
 }
 
+.linked {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: color-mix(in srgb, var(--c-primary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c-primary) 30%, transparent);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--c-primary);
+}
+
+.linkedLabel {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .actions {
     display: grid;
     grid-template-columns: 1fr 2fr;

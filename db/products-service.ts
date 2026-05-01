@@ -61,6 +61,10 @@ class ProductsService {
         await db.products.delete(id);
     }
 
+    public async clear(): Promise<void> {
+        await db.products.clear();
+    }
+
     private generateId(): string {
         if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
             return crypto.randomUUID();
@@ -70,4 +74,5 @@ class ProductsService {
     }
 }
 
-export const productsService = new ProductsService();
+const productsService = new ProductsService();
+export default productsService;

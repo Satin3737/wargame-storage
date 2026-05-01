@@ -1,5 +1,5 @@
-import {IProduct} from '@/db';
-import {ISortDir, ISortKey, SortDir} from '@/hooks';
+import type {IProduct} from '@/db';
+import {type ISortDir, type ISortKey, SortDir} from '@/hooks';
 
 export const compareProducts = (a: IProduct, b: IProduct, key: ISortKey, dir: ISortDir): number => {
     const sign = dir === SortDir.asc ? 1 : -1;
