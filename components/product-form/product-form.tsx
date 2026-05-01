@@ -7,7 +7,7 @@ import {z} from 'zod';
 import {type IProduct, productsService} from '@/db';
 import {Category} from '@/constants';
 import {type IProductFormValues, productFormSchema} from '@/schemas';
-import {hapticsService, toastService, upcLookupService} from '@/services';
+import {barcodeLookupService, hapticsService, toastService} from '@/services';
 import {BtnSize, BtnVariant, Button, ConfirmModal, IconButton, Spinner} from '@/components';
 import {BarcodeScanner} from './barcode-scanner';
 import {useAppForm} from './form-hook';
@@ -99,7 +99,7 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
         setLookupBusy(true);
 
         try {
-            const result = await upcLookupService.lookup(trimmed);
+            const result = await barcodeLookupService.lookup(trimmed);
             switch (result.kind) {
                 case 'found':
                     form.setFieldValue('name', result.name);
