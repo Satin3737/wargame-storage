@@ -15,6 +15,7 @@ const config: Config = {
         '^@/db(.*)$',
         '^@/constants(.*)$',
         '^@/schemas(.*)$',
+        '^@/helpers(.*)$',
         '^@/services(.*)$',
         '^@/hooks(.*)$',
         '^@/components(.*)$',
