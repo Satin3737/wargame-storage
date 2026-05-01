@@ -1,3 +1,5 @@
+@use '@/styles/responsive' as r;
+
 .bar {
     display: flex;
     flex-direction: column;
@@ -16,10 +18,34 @@
     display: grid;
     grid-template-columns: 1fr 1fr 64px;
     gap: 8px;
+
+    @include r.responsiveBelow(480px) {
+        grid-template-areas:
+            'category category category'
+            'sortKey sortKey sortDir';
+    }
 }
 
 .category,
 .sortKey,
 .sortDir {
     min-width: 0;
+}
+
+.category {
+    @include r.responsiveBelow(480px) {
+        grid-area: category;
+    }
+}
+
+.sortKey {
+    @include r.responsiveBelow(480px) {
+        grid-area: sortKey;
+    }
+}
+
+.sortDir {
+    @include r.responsiveBelow(480px) {
+        grid-area: sortDir;
+    }
 }
