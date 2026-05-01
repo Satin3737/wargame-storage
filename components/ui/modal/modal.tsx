@@ -29,7 +29,7 @@ const Modal: FC<IModalProps> = ({open, onClose, children, title, variant = Modal
     return (
         <div className={clsx(styles.overlay, styles[variant])} onClick={onClose} role={'dialog'} aria-modal={'true'}>
             <div className={clsx(styles.content, contentClassName)} onClick={e => e.stopPropagation()}>
-                {title ? <div className={styles.title}>{title}</div> : null}
+                {!!title && <div className={styles.title}>{title}</div>}
                 {children}
             </div>
         </div>

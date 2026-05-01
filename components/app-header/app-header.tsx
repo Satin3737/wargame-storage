@@ -8,16 +8,16 @@ import styles from './app-header.module.scss';
 const AppHeader: FC<IAppHeaderProps> = ({title, backHref, rightSlot}) => (
     <header className={styles.header}>
         <div className={styles.left}>
-            {backHref ? (
+            {!!backHref && (
                 <Link href={backHref} aria-label={'back'}>
                     <IconButton aria-label={'back'}>
                         <ArrowLeftIcon size={20} />
                     </IconButton>
                 </Link>
-            ) : null}
+            )}
             <h1 className={styles.title}>{title}</h1>
         </div>
-        {rightSlot ? <div className={styles.right}>{rightSlot}</div> : null}
+        {!!rightSlot && <div className={styles.right}>{rightSlot}</div>}
     </header>
 );
 

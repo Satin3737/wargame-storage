@@ -1,0 +1,88 @@
+@use '@/styles/helper' as h;
+
+.wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--c-accent-bg);
+    border: 1px solid var(--c-shade-2);
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--c-shade-4);
+    text-transform: uppercase;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 8px;
+    cursor: pointer;
+    text-align: left;
+    color: var(--c-white);
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease;
+
+    @include h.mediaHover {
+        &:hover {
+            background: var(--c-shade-1);
+            border-color: var(--c-shade-2);
+        }
+    }
+}
+
+.thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--c-shade-1);
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    flex: 1;
+}
+
+.name {
+    font-size: 16px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.meta {
+    font-size: 12px;
+    color: var(--c-shade-4);
+}

@@ -1,0 +1,65 @@
+@use '@/styles/responsive' as r;
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--c-shade-4);
+    text-transform: uppercase;
+}
+
+.barcodeBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.barcodeRow {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.barcodeInput {
+    flex: 1;
+    background: var(--c-shade-1);
+    border: 1px solid var(--c-shade-2);
+    border-radius: 12px;
+    color: var(--c-white);
+    padding: 12px 16px;
+    font-size: 16px;
+    outline: none;
+    min-width: 0;
+
+    &:focus {
+        border-color: var(--c-primary);
+        background: var(--c-accent-bg);
+    }
+
+    &::placeholder {
+        color: var(--c-shade-3);
+    }
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    @include r.responsiveBelow(420px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 12px;
+    margin-top: 4px;
+}

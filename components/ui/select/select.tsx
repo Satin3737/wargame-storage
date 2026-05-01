@@ -6,18 +6,18 @@ import styles from './select.module.scss';
 
 const Select: FC<ISelectProps> = ({label, options, invalid, error, placeholder, className, id, ...rest}) => (
     <div className={clsx(styles.wrap, className)}>
-        {label ? (
+        {!!label && (
             <label className={styles.label} htmlFor={id}>
                 {label}
             </label>
-        ) : null}
+        )}
         <div className={clsx(styles.field, (invalid || error) && styles.invalid)}>
             <select {...rest} id={id} className={styles.select}>
-                {placeholder ? (
+                {!!placeholder && (
                     <option value={''} disabled>
                         {placeholder}
                     </option>
-                ) : null}
+                )}
                 {options.map(o => (
                     <option key={o.value} value={o.value}>
                         {o.label}
@@ -26,7 +26,7 @@ const Select: FC<ISelectProps> = ({label, options, invalid, error, placeholder, 
             </select>
             <CaretDownIcon className={styles.chevron} size={16} aria-hidden={'true'} weight={'bold'} />
         </div>
-        {error ? <div className={styles.error}>{error}</div> : null}
+        {!!error && <div className={styles.error}>{error}</div>}
     </div>
 );
 
