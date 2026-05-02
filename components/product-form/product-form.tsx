@@ -188,36 +188,35 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 {field => <field.TextAreaField label={'Название'} placeholder={'Например, Catan'} />}
             </form.AppField>
 
-            {isCreate && (
-                <form.Subscribe selector={state => ({name: state.values.name, barcode: state.values.barcode})}>
-                    {({name, barcode}) => (
-                        <SimilarProducts
-                            name={name}
-                            barcode={barcode}
-                            excludeId={initial?.id ?? null}
-                            onPick={handlePickExisting}
-                        />
-                    )}
-                </form.Subscribe>
-            )}
-
-            {!!linkedExistingId && isCreate && (
-                <div className={styles.linked}>
-                    <span className={styles.linkedLabel}>
-                        {'Будет добавлено к: '}
-                        {linkedName}
-                    </span>
-                    <Button
-                        variant={BtnVariant.ghost}
-                        onClick={() => {
-                            setLinkedExistingId(null);
-                            setLinkedName(null);
-                        }}
-                    >
-                        {'Отвязать'}
-                    </Button>
-                </div>
-            )}
+            {isCreate &&
+                (linkedExistingId ? (
+                    <div className={styles.linked}>
+                        <span className={styles.linkedLabel}>
+                            {'Будет добавлено к: '}
+                            {linkedName}
+                        </span>
+                        <Button
+                            variant={BtnVariant.ghost}
+                            onClick={() => {
+                                setLinkedExistingId(null);
+                                setLinkedName(null);
+                            }}
+                        >
+                            {'Отвязать'}
+                        </Button>
+                    </div>
+                ) : (
+                    <form.Subscribe selector={state => ({name: state.values.name, barcode: state.values.barcode})}>
+                        {({name, barcode}) => (
+                            <SimilarProducts
+                                name={name}
+                                barcode={barcode}
+                                excludeId={initial?.id ?? null}
+                                onPick={handlePickExisting}
+                            />
+                        )}
+                    </form.Subscribe>
+                ))}
 
             <div className={styles.row}>
                 <form.AppField name={'qty'} validators={{onChange: productFormSchema.shape.qty}}>
