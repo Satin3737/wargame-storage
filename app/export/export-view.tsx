@@ -1,6 +1,7 @@
 'use client';
 
 import {DownloadSimpleIcon, FileXlsIcon, TrashIcon} from '@phosphor-icons/react/dist/ssr';
+import {useRouter} from 'next/navigation';
 import {type FC, useState} from 'react';
 import {productsService} from '@/db';
 import {exportService, hapticsService, toastService} from '@/services';
@@ -9,6 +10,7 @@ import {BtnSize, BtnVariant, Button, ConfirmModal, Spinner} from '@/components';
 import styles from './export-view.module.scss';
 
 const ExportView: FC = () => {
+    const router = useRouter();
     const [busy, setBusy] = useState(false);
     const [clearing, setClearing] = useState(false);
     const [confirmClearOpen, setConfirmClearOpen] = useState(false);
@@ -42,6 +44,7 @@ const ExportView: FC = () => {
             await productsService.clear();
             hapticsService.success();
             toastService.success('Очищено');
+            router.push('/');
         } catch {
             hapticsService.error();
             toastService.error('Не удалось очистить');
@@ -68,6 +71,7 @@ const ExportView: FC = () => {
                 fullWidth
                 onClick={handleExport}
                 disabled={busy || !products?.length}
+                suppressHydrationWarning
             >
                 {busy ? <Spinner size={20} /> : <FileXlsIcon size={20} />}
                 {'Скачать XLSX'}
@@ -79,6 +83,7 @@ const ExportView: FC = () => {
                 fullWidth
                 onClick={() => setConfirmClearOpen(true)}
                 disabled={clearing || !products?.length}
+                suppressHydrationWarning
             >
                 <TrashIcon size={20} />
                 {'Очистить весь склад'}
