@@ -41,7 +41,7 @@ class ExportService {
                 const rowNumber = row.number;
 
                 sheet.addImage(imageId, {
-                    tl: {col: 3.1, row: rowNumber - 1},
+                    tl: {col: 3.1, row: rowNumber - 1 + 0.1},
                     ext: {width: 80, height: 80}
                 });
             }
