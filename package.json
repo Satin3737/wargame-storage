@@ -15,7 +15,6 @@
         "@tanstack/react-form": "^1.29.1",
         "@tanstack/react-form-nextjs": "^1.29.1",
         "@zxing/browser": "^0.2.0",
-        "axios": "^1.15.2",
         "clsx": "^2.1.1",
         "dexie": "^4.4.2",
         "dexie-export-import": "^4.4.0",
@@ -25,7 +24,7 @@
         "react": "19.2.5",
         "react-dom": "19.2.5",
         "react-toastify": "^11.1.0",
-        "zod": "^4.4.1"
+        "zod": "^4.4.2"
     },
     "devDependencies": {
         "@tanstack/react-devtools": "^0.10.2",
