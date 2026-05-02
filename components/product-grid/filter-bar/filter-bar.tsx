@@ -33,7 +33,7 @@ const FilterBar: FC<IFilterBarProps> = ({
 }) => (
     <div className={styles.bar}>
         <TextInput
-            placeholder={'Поиск по названию или ID...'}
+            placeholder={'Поиск по названию или штрихкоду...'}
             value={search}
             onChange={e => onSearch(e.target.value)}
             className={styles.search}
