@@ -8,7 +8,7 @@ export class WargameDb extends Dexie {
         super('wargame-storage');
 
         this.version(1).stores({
-            products: 'id, name, category, qty, updatedAt'
+            products: 'id, barcode, name, category, qty, updatedAt'
         });
 
         this.products = this.table('products');
