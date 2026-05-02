@@ -50,7 +50,7 @@
     gap: 4px;
     min-width: 0;
 
-    @include r.responsiveBelow(450px) {
+    @include r.responsiveBelow(425px) {
         grid-column: 2 / 6;
     }
 }
@@ -98,7 +98,7 @@
     align-items: center;
     gap: 8px;
 
-    @include r.responsiveBelow(450px) {
+    @include r.responsiveBelow(425px) {
         grid-column: 2 / -1;
     }
 }
@@ -126,7 +126,7 @@
         background-color 0.15s ease,
         border-color 0.15s ease;
 
-    @include r.responsiveBelow(450px) {
+    @include r.responsiveBelow(425px) {
         grid-column: -1 / -1;
     }
 

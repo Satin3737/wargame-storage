@@ -36,7 +36,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 12px;
 
-    @include r.responsiveBelow(420px) {
+    @include r.responsiveBelow(480px) {
         grid-template-columns: 1fr;
     }
 }
