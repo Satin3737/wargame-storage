@@ -185,7 +185,7 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                     }
                 }}
             >
-                {field => <field.TextField label={'Название'} placeholder={'Например, Catan'} />}
+                {field => <field.TextAreaField label={'Название'} placeholder={'Например, Catan'} />}
             </form.AppField>
 
             {isCreate && (
