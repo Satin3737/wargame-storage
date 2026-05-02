@@ -3,7 +3,7 @@
 import {CameraIcon, ImageIcon, TrashIcon} from '@phosphor-icons/react/dist/ssr';
 import {type FC, useRef} from 'react';
 import {useObjectUrl} from '@/hooks';
-import {BtnVariant, Button} from '@/components';
+import {BtnVariant, Button, IconButton} from '@/components';
 import {useFieldContext} from '../../form-context';
 import type {IPhotoFieldProps} from './types';
 import styles from './photo-field.module.scss';
@@ -30,6 +30,11 @@ const PhotoField: FC<IPhotoFieldProps> = ({label = 'Фото'}) => {
                     ) : (
                         <span className={styles.placeholder}>{'Нет фото'}</span>
                     )}
+                    {!!blob && (
+                        <IconButton onClick={() => field.handleChange(null)} className={styles.deleteBtn}>
+                            <TrashIcon size={20} />
+                        </IconButton>
+                    )}
                 </div>
                 <div className={styles.actions}>
                     <Button variant={BtnVariant.ghost} fullWidth onClick={() => cameraRef.current?.click()}>
@@ -40,12 +45,6 @@ const PhotoField: FC<IPhotoFieldProps> = ({label = 'Фото'}) => {
                         <ImageIcon size={20} />
                         {'Галерея'}
                     </Button>
-                    {!!blob && (
-                        <Button variant={BtnVariant.danger} fullWidth onClick={() => field.handleChange(null)}>
-                            <TrashIcon size={20} />
-                            {'Удалить'}
-                        </Button>
-                    )}
                 </div>
             </div>
             <input
