@@ -27,8 +27,8 @@ const SimilarItem: FC<ISimilarItemProps> = ({product, onPick}) => {
     );
 };
 
-const SimilarProducts: FC<ISimilarProductsProps> = ({query, excludeId, onPick}) => {
-    const products = useSimilarProducts(query, excludeId);
+const SimilarProducts: FC<ISimilarProductsProps> = ({name, barcode, excludeId, onPick}) => {
+    const products = useSimilarProducts(name, barcode, excludeId);
     if (!products.length) return null;
 
     return (
