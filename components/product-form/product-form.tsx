@@ -3,12 +3,11 @@
 import {BarcodeIcon, FileSearchIcon, FloppyDiskIcon, TrashIcon, XIcon} from '@phosphor-icons/react/dist/ssr';
 import {useRouter} from 'next/navigation';
 import {type FC, useState} from 'react';
-import {z} from 'zod';
 import {type IProduct, productsService} from '@/db';
 import {Category} from '@/constants';
 import {type IProductFormValues, productFormSchema} from '@/schemas';
-import {barcodeLookupService, hapticsService, toastService} from '@/services';
-import {BtnSize, BtnVariant, Button, ConfirmModal, IconButton, Spinner} from '@/components';
+import {hapticsService, toastService} from '@/services';
+import {BtnSize, BtnVariant, Button, ConfirmModal, IconButton} from '@/components';
 import {BarcodeScanner} from './barcode-scanner';
 import {useAppForm} from './form-hook';
 import {SimilarProducts} from './similar-products';
@@ -28,17 +27,13 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
     const [scannerOpen, setScannerOpen] = useState(false);
     const [linkedExistingId, setLinkedExistingId] = useState<string | null>(initial?.id ?? null);
     const [linkedName, setLinkedName] = useState<string | null>(initial?.name ?? null);
-    const [lookupBusy, setLookupBusy] = useState(false);
+    const [linkedBarcode, setLinkedBarcode] = useState<string | null>(initial?.barcode ?? null);
     const [deleting, setDeleting] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-    const [barcodeInput, setBarcodeInput] = useState(initial?.barcode ?? '');
 
     const form = useAppForm({
         defaultValues: buildDefault(initial),
-        validators: {
-            onChange: productFormSchema,
-            onSubmit: productFormSchema
-        },
+        validators: {onSubmit: productFormSchema},
         onSubmit: async ({value}) => {
             try {
                 if (mode === ProductFormMode.edit && initial) {
@@ -90,48 +85,15 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
         }
     });
 
-    const runLookup = async (code: string) => {
-        const trimmed = code.trim();
-        if (!trimmed) return;
-
-        form.setFieldValue('barcode', trimmed);
-        setBarcodeInput(trimmed);
-        setLookupBusy(true);
-
-        try {
-            const result = await barcodeLookupService.lookup(trimmed);
-            switch (result.kind) {
-                case 'found':
-                    form.setFieldValue('name', result.name);
-                    toastService.info(`Найдено: ${result.name}`);
-                    break;
-                case 'rate-limited':
-                    toastService.error('Лимит сервиса исчерпан. Попробуйте позже');
-                    break;
-                case 'not-found':
-                    toastService.info('По штрихкоду ничего не найдено');
-                    break;
-                case 'error':
-                    toastService.error('Не удалось выполнить поиск');
-                    break;
-            }
-        } finally {
-            setLookupBusy(false);
-        }
-    };
-
     const handlePickExisting = (existing: IProduct) => {
         setLinkedExistingId(existing.id);
         setLinkedName(existing.name);
+        setLinkedBarcode(existing.barcode);
 
         form.setFieldValue('name', existing.name);
         form.setFieldValue('category', existing.category);
         form.setFieldValue('photoBlob', existing.photoBlob);
-
-        if (existing.barcode) {
-            form.setFieldValue('barcode', existing.barcode);
-            setBarcodeInput(existing.barcode);
-        }
+        form.setFieldValue('barcode', existing.barcode);
 
         toastService.info('Будет добавлено к существующему');
         hapticsService.tap();
@@ -153,8 +115,15 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
         }
     };
 
-    const handleWebSearch = () => {
-        window.open(`https://www.google.com/search?q=${encodeURIComponent(barcodeInput.trim())}`, '_blank');
+    const handleWebSearch = (barcode: string | null) => {
+        if (!barcode) return;
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(barcode.trim())}`, '_blank');
+    };
+
+    const dropLinked = () => {
+        setLinkedExistingId(null);
+        setLinkedName(null);
+        setLinkedBarcode(null);
     };
 
     return (
@@ -170,24 +139,30 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 <div className={styles.barcodeBlock}>
                     <span className={styles.label}>{'Штрихкод'}</span>
                     <div className={styles.barcodeRow}>
-                        <input
-                            className={styles.barcodeInput}
-                            value={barcodeInput}
-                            onChange={e => setBarcodeInput(e.target.value)}
-                            placeholder={'EAN / UPC...'}
-                            inputMode={'numeric'}
-                        />
-                        <Button
-                            variant={BtnVariant.ghost}
-                            onClick={() => runLookup(barcodeInput)}
-                            disabled={lookupBusy || !barcodeInput.trim()}
+                        <form.AppField
+                            name={'barcode'}
+                            validators={{onChange: productFormSchema.shape.barcode}}
+                            listeners={{
+                                onChange: ({value}) => {
+                                    if (linkedExistingId && value?.trim() !== linkedBarcode?.trim()) {
+                                        dropLinked();
+                                    }
+                                }
+                            }}
                         >
-                            {lookupBusy && <Spinner size={20} />}
-                            {'Поиск'}
-                        </Button>
-                        <IconButton disabled={!barcodeInput} onClick={handleWebSearch} aria-label={'web search'}>
-                            <FileSearchIcon size={20} />
-                        </IconButton>
+                            {field => <field.TextField placeholder={'EAN / UPC...'} inputMode={'numeric'} />}
+                        </form.AppField>
+                        <form.Subscribe selector={state => state.values.barcode}>
+                            {barcode => (
+                                <IconButton
+                                    disabled={!barcode}
+                                    onClick={() => handleWebSearch(barcode)}
+                                    aria-label={'web search'}
+                                >
+                                    <FileSearchIcon size={20} />
+                                </IconButton>
+                            )}
+                        </form.Subscribe>
                         <IconButton onClick={() => setScannerOpen(true)} aria-label={'scan'}>
                             <BarcodeIcon size={20} />
                         </IconButton>
@@ -197,22 +172,26 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
 
             <form.AppField
                 name={'name'}
-                validators={{
+                validators={{onChange: productFormSchema.shape.name}}
+                listeners={{
                     onChange: ({value}) => {
-                        if (linkedExistingId && value.trim() !== linkedName?.trim()) {
-                            setLinkedExistingId(null);
-                            setLinkedName(null);
+                        if (linkedExistingId && value?.trim() !== linkedName?.trim()) {
+                            dropLinked();
                         }
-                        return z.string().trim().min(2, 'Минимум 2 символа').safeParse(value).error?.issues[0]?.message;
                     }
                 }}
             >
                 {field => <field.TextField label={'Название'} placeholder={'Например, Catan'} />}
             </form.AppField>
 
-            <form.Subscribe selector={state => state.values.name}>
-                {nameValue => (
-                    <SimilarProducts query={nameValue} excludeId={initial?.id ?? null} onPick={handlePickExisting} />
+            <form.Subscribe selector={state => ({name: state.values.name, barcode: state.values.barcode})}>
+                {({name, barcode}) => (
+                    <SimilarProducts
+                        name={name}
+                        barcode={barcode}
+                        excludeId={initial?.id ?? null}
+                        onPick={handlePickExisting}
+                    />
                 )}
             </form.Subscribe>
 
@@ -235,13 +214,15 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
             )}
 
             <div className={styles.row}>
-                <form.AppField name={'qty'}>
+                <form.AppField name={'qty'} validators={{onChange: productFormSchema.shape.qty}}>
                     {field => <field.NumberField label={'Количество'} min={0} />}
                 </form.AppField>
                 <form.AppField name={'category'}>{field => <field.CategoryField />}</form.AppField>
             </div>
 
-            <form.AppField name={'photoBlob'}>{field => <field.PhotoField />}</form.AppField>
+            <form.AppField name={'photoBlob'} validators={{onChange: productFormSchema.shape.photoBlob}}>
+                {field => <field.PhotoField />}
+            </form.AppField>
 
             <div className={styles.actions}>
                 <Button variant={BtnVariant.ghost} size={BtnSize.lg} onClick={() => router.back()}>
@@ -284,7 +265,9 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 onClose={() => setScannerOpen(false)}
                 onDetected={code => {
                     setScannerOpen(false);
-                    void runLookup(code);
+                    const trimmed = code.trim();
+                    if (!trimmed) return;
+                    form.setFieldValue('barcode', trimmed);
                 }}
             />
         </form>
