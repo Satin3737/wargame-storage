@@ -1,6 +1,6 @@
 'use client';
 
-import {BarcodeIcon, CopyIcon, FloppyDiskIcon, TrashIcon, XIcon} from '@phosphor-icons/react/dist/ssr';
+import {BarcodeIcon, FileSearchIcon, FloppyDiskIcon, TrashIcon, XIcon} from '@phosphor-icons/react/dist/ssr';
 import {useRouter} from 'next/navigation';
 import {type FC, useState} from 'react';
 import {z} from 'zod';
@@ -153,15 +153,8 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
         }
     };
 
-    const handleCopy = () => {
-        try {
-            void navigator.clipboard.writeText(barcodeInput.trim());
-            hapticsService.success();
-            toastService.success('Скопировано в буфер обмена');
-        } catch (_) {
-            hapticsService.error();
-            toastService.error('Не удалось скопировать');
-        }
+    const handleWebSearch = () => {
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(barcodeInput.trim())}`, '_blank');
     };
 
     return (
@@ -192,8 +185,8 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                             {lookupBusy && <Spinner size={20} />}
                             {'Поиск'}
                         </Button>
-                        <IconButton disabled={!barcodeInput} onClick={handleCopy} aria-label={'copy'}>
-                            <CopyIcon size={20} />
+                        <IconButton disabled={!barcodeInput} onClick={handleWebSearch} aria-label={'web search'}>
+                            <FileSearchIcon size={20} />
                         </IconButton>
                         <IconButton onClick={() => setScannerOpen(true)} aria-label={'scan'}>
                             <BarcodeIcon size={20} />
