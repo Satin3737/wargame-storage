@@ -8,13 +8,13 @@ class ExportService {
         const sheet = workbook.addWorksheet('Склад');
 
         sheet.columns = [
-            {header: 'Название', key: 'name', width: 36},
-            {header: 'Штрихкод', key: 'barcode', width: 36},
-            {header: 'Категория', key: 'category', width: 22},
-            {header: 'Количество', key: 'qty', width: 14},
-            {header: 'Фото', key: 'photo', width: 14},
-            {header: 'Обновлено', key: 'updated', width: 22},
-            {header: 'ID', key: 'id', width: 38}
+            {header: 'Название', key: 'name', width: 40},
+            {header: 'Количество', key: 'qty', width: 16},
+            {header: 'Категория', key: 'category', width: 24},
+            {header: 'Фото', key: 'photo', width: 16},
+            {header: 'Штрихкод', key: 'barcode', width: 40},
+            {header: 'Обновлено', key: 'updated', width: 24},
+            {header: 'ID', key: 'id', width: 40}
         ];
 
         const headerRow = sheet.getRow(1);
@@ -25,10 +25,10 @@ class ExportService {
 
             const row = sheet.addRow({
                 name: product.name,
-                barcode: product.barcode,
-                category: CategoryLabel[product.category],
                 qty: product.qty,
+                category: CategoryLabel[product.category],
                 photo: '',
+                barcode: product.barcode,
                 updated: this.formatTimestamp(product.updatedAt),
                 id: product.id
             });
