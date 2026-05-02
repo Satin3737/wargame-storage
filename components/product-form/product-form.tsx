@@ -1,6 +1,7 @@
 'use client';
 
 import {BarcodeIcon, FileSearchIcon, FloppyDiskIcon, TrashIcon, XIcon} from '@phosphor-icons/react/dist/ssr';
+import clsx from 'clsx';
 import {useRouter} from 'next/navigation';
 import {type FC, useState} from 'react';
 import {type IProduct, productsService} from '@/db';
@@ -30,13 +31,14 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
     const [linkedBarcode, setLinkedBarcode] = useState<string | null>(initial?.barcode ?? null);
     const [deleting, setDeleting] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const isCreate = mode === ProductFormMode.create;
 
     const form = useAppForm({
         defaultValues: buildDefault(initial),
         validators: {onSubmit: productFormSchema},
         onSubmit: async ({value}) => {
             try {
-                if (mode === ProductFormMode.edit && initial) {
+                if (!isCreate && initial) {
                     await productsService.update(initial.id, {
                         name: value.name.trim(),
                         qty: value.qty,
@@ -135,40 +137,42 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 void form.handleSubmit();
             }}
         >
-            {mode === ProductFormMode.create && (
-                <div className={styles.barcodeBlock}>
-                    <span className={styles.label}>{'Штрихкод'}</span>
-                    <div className={styles.barcodeRow}>
-                        <form.AppField
-                            name={'barcode'}
-                            validators={{onChange: productFormSchema.shape.barcode}}
-                            listeners={{
-                                onChange: ({value}) => {
-                                    if (linkedExistingId && value?.trim() !== linkedBarcode?.trim()) {
-                                        dropLinked();
-                                    }
+            <div className={styles.barcodeBlock}>
+                <span className={styles.label}>{'Штрихкод'}</span>
+                <div className={clsx(styles.barcodeRow, {[styles.withButtons]: isCreate})}>
+                    <form.AppField
+                        name={'barcode'}
+                        validators={{onChange: productFormSchema.shape.barcode}}
+                        listeners={{
+                            onChange: ({value}) => {
+                                if (linkedExistingId && value?.trim() !== linkedBarcode?.trim()) {
+                                    dropLinked();
                                 }
-                            }}
-                        >
-                            {field => <field.TextField placeholder={'EAN / UPC...'} inputMode={'numeric'} />}
-                        </form.AppField>
-                        <form.Subscribe selector={state => state.values.barcode}>
-                            {barcode => (
-                                <IconButton
-                                    disabled={!barcode}
-                                    onClick={() => handleWebSearch(barcode)}
-                                    aria-label={'web search'}
-                                >
-                                    <FileSearchIcon size={20} />
-                                </IconButton>
-                            )}
-                        </form.Subscribe>
-                        <IconButton onClick={() => setScannerOpen(true)} aria-label={'scan'}>
-                            <BarcodeIcon size={20} />
-                        </IconButton>
-                    </div>
+                            }
+                        }}
+                    >
+                        {field => <field.TextField placeholder={'EAN / UPC...'} inputMode={'numeric'} />}
+                    </form.AppField>
+                    {isCreate && (
+                        <>
+                            <form.Subscribe selector={state => state.values.barcode}>
+                                {barcode => (
+                                    <IconButton
+                                        disabled={!barcode}
+                                        onClick={() => handleWebSearch(barcode)}
+                                        aria-label={'web search'}
+                                    >
+                                        <FileSearchIcon size={20} />
+                                    </IconButton>
+                                )}
+                            </form.Subscribe>
+                            <IconButton onClick={() => setScannerOpen(true)} aria-label={'scan'}>
+                                <BarcodeIcon size={20} />
+                            </IconButton>
+                        </>
+                    )}
                 </div>
-            )}
+            </div>
 
             <form.AppField
                 name={'name'}
@@ -184,18 +188,20 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 {field => <field.TextField label={'Название'} placeholder={'Например, Catan'} />}
             </form.AppField>
 
-            <form.Subscribe selector={state => ({name: state.values.name, barcode: state.values.barcode})}>
-                {({name, barcode}) => (
-                    <SimilarProducts
-                        name={name}
-                        barcode={barcode}
-                        excludeId={initial?.id ?? null}
-                        onPick={handlePickExisting}
-                    />
-                )}
-            </form.Subscribe>
+            {isCreate && (
+                <form.Subscribe selector={state => ({name: state.values.name, barcode: state.values.barcode})}>
+                    {({name, barcode}) => (
+                        <SimilarProducts
+                            name={name}
+                            barcode={barcode}
+                            excludeId={initial?.id ?? null}
+                            onPick={handlePickExisting}
+                        />
+                    )}
+                </form.Subscribe>
+            )}
 
-            {!!linkedExistingId && mode === ProductFormMode.create && (
+            {!!linkedExistingId && isCreate && (
                 <div className={styles.linked}>
                     <span className={styles.linkedLabel}>
                         {'Будет добавлено к: '}
@@ -237,7 +243,7 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 </form.AppForm>
             </div>
 
-            {mode === ProductFormMode.edit && (
+            {!isCreate && (
                 <Button
                     variant={BtnVariant.danger}
                     size={BtnSize.lg}
