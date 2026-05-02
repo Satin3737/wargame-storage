@@ -12,7 +12,8 @@ import type {IProductCardProps} from './types';
 import styles from './product-card.module.scss';
 
 const ProductCard: FC<IProductCardProps> = ({product, onPhotoClick}) => {
-    const thumb = useObjectUrl(product.photoBlob);
+    const {id, name, barcode, qty, category, photoBlob} = product;
+    const thumb = useObjectUrl(photoBlob);
 
     const adjust = async (delta: number) => {
         try {
@@ -24,7 +25,7 @@ const ProductCard: FC<IProductCardProps> = ({product, onPhotoClick}) => {
     };
 
     return (
-        <article className={styles.card} style={{viewTransitionName: `product-${product.id}`}}>
+        <article className={styles.card} style={{viewTransitionName: `product-${id}`}}>
             <button
                 type={'button'}
                 className={styles.photoBtn}
@@ -32,28 +33,28 @@ const ProductCard: FC<IProductCardProps> = ({product, onPhotoClick}) => {
                 aria-label={'open photo'}
             >
                 {thumb ? (
-                    <img className={styles.photo} src={thumb} alt={''} />
+                    <img className={styles.photo} src={thumb} alt={`Товар ${name}`} />
                 ) : (
                     <span className={styles.photoPlaceholder}>{'—'}</span>
                 )}
             </button>
             <div className={styles.info}>
-                <div className={styles.name}>{product.name}</div>
+                <div className={styles.name}>{name}</div>
                 <div className={styles.meta}>
-                    <span className={styles.category}>{CategoryLabel[product.category]}</span>
+                    <span className={styles.category}>{CategoryLabel[category]}</span>
                 </div>
-                <div className={styles.id}>{product.id}</div>
+                {!!barcode && <div className={styles.barcode}>{barcode}</div>}
             </div>
             <div className={styles.qtyBlock}>
                 <IconButton size={IconBtnSize.sm} onClick={() => adjust(-1)} aria-label={'decrement'}>
                     <MinusIcon size={16} />
                 </IconButton>
-                <span className={styles.qty}>{product.qty}</span>
+                <span className={styles.qty}>{qty}</span>
                 <IconButton size={IconBtnSize.sm} onClick={() => adjust(1)} aria-label={'increment'}>
                     <PlusIcon size={16} />
                 </IconButton>
             </div>
-            <Link href={`/edit/${product.id}`} className={styles.editLink} aria-label={'edit'}>
+            <Link href={`/edit/${id}`} className={styles.editLink} aria-label={'edit'}>
                 <PencilSimpleIcon size={16} />
             </Link>
         </article>
