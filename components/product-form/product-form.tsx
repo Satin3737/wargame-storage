@@ -220,7 +220,7 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
 
             <div className={styles.row}>
                 <form.AppField name={'qty'} validators={{onChange: productFormSchema.shape.qty}}>
-                    {field => <field.NumberField label={'Количество'} min={0} />}
+                    {field => <field.NumberField label={'Количество'} />}
                 </form.AppField>
                 <form.AppField name={'category'}>{field => <field.CategoryField />}</form.AppField>
             </div>

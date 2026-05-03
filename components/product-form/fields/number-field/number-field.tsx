@@ -18,10 +18,11 @@ const NumberField: FC<INumberFieldProps> = ({label, hint, placeholder, min = 0, 
             inputMode={'numeric'}
             min={min}
             max={max}
-            value={Number.isFinite(field.state.value) ? field.state.value : 0}
+            value={Number.isFinite(field.state.value) ? field.state.value : ''}
             onChange={e => {
-                const next = Number(e.target.value);
-                field.handleChange(Number.isFinite(next) ? next : 0);
+                const value = e.target.value;
+                const next = !value ? value : Number(value);
+                field.handleChange((Number.isFinite(next) ? next : '') as number);
             }}
             onBlur={field.handleBlur}
             error={errorText}
