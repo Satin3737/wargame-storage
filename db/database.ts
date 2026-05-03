@@ -10,8 +10,12 @@ export class WargameDb extends Dexie {
 
     public constructor() {
         super('wargame-storage');
-        this.version(1).stores(this.initialTables);
+        this.migrateDatabase();
         this.products = this.table('products');
+    }
+
+    private migrateDatabase(): void {
+        this.version(1).stores(this.initialTables);
     }
 }
 
