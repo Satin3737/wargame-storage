@@ -1,16 +1,23 @@
-import {toast} from 'react-toastify';
+import {ToastOptions, toast} from 'react-toastify';
 
 class ToastService {
+    private readonly options: ToastOptions = {
+        autoClose: 1000,
+        closeOnClick: true,
+        closeButton: false,
+        hideProgressBar: true
+    };
+
     public success(message: string): void {
-        toast.success(message);
+        toast.success(message, this.options);
     }
 
     public error(message: string): void {
-        toast.error(message);
+        toast.error(message, this.options);
     }
 
     public info(message: string): void {
-        toast.info(message);
+        toast.info(message, this.options);
     }
 }
 
