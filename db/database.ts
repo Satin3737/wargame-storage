@@ -21,7 +21,7 @@ export class WargameDb extends Dexie {
     private migrateDatabase(): void {
         this.version(1).stores(this.initialTables);
 
-        this.version(3)
+        this.version(4)
             .stores(this.initialTables)
             .upgrade(async tx => {
                 this.pendingPhotoOptimizationIds = await tx
