@@ -7,7 +7,7 @@ import {type FC, useState} from 'react';
 import {type IProduct, productsService} from '@/db';
 import {Category} from '@/constants';
 import {type IProductFormValues, productFormSchema} from '@/schemas';
-import {hapticsService, toastService} from '@/services';
+import {StorageKeys, hapticsService, storageService, toastService} from '@/services';
 import {BtnSize, BtnVariant, Button, ConfirmModal, IconButton} from '@/components';
 import {BarcodeScanner} from './barcode-scanner';
 import {useAppForm} from './form-hook';
@@ -18,7 +18,7 @@ import styles from './product-form.module.scss';
 const buildDefault = (initial: IProduct | undefined): IProductFormValues => ({
     name: initial?.name ?? '',
     qty: initial?.qty ?? 1,
-    category: initial?.category ?? Category.boardGames,
+    category: initial?.category ?? storageService.get(StorageKeys.lastCategory) ?? Category.boardGames,
     photoBlob: initial?.photoBlob ?? null,
     barcode: initial?.barcode ?? null
 });
@@ -222,7 +222,12 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 <form.AppField name={'qty'} validators={{onChange: productFormSchema.shape.qty}}>
                     {field => <field.NumberField label={'Количество'} />}
                 </form.AppField>
-                <form.AppField name={'category'}>{field => <field.CategoryField />}</form.AppField>
+                <form.AppField
+                    name={'category'}
+                    listeners={{onChange: ({value}) => storageService.set(StorageKeys.lastCategory, value)}}
+                >
+                    {field => <field.CategoryField />}
+                </form.AppField>
             </div>
 
             <form.AppField name={'photoBlob'} validators={{onChange: productFormSchema.shape.photoBlob}}>
