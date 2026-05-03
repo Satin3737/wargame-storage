@@ -6,6 +6,11 @@
     animation: spin 0.8s linear infinite;
 }
 
+.inverted {
+    border: 2px solid var(--c-shade-4);
+    border-top-color: var(--c-white);
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
