@@ -21,7 +21,7 @@ export class WargameDb extends Dexie {
     private migrateDatabase(): void {
         this.version(1).stores(this.initialTables);
 
-        this.version(4)
+        this.version(5)
             .stores(this.initialTables)
             .upgrade(async tx => {
                 this.pendingPhotoOptimizationIds = await tx
@@ -37,13 +37,10 @@ export class WargameDb extends Dexie {
         this.pendingPhotoOptimizationIds = [];
 
         for (const id of ids) {
-            console.log(`Optimizing photo for product ${id}...`);
             const product = await this.products.get(id);
             if (!product?.photoBlob) continue;
-            console.log(`current size: ${(product.photoBlob.size / 1024 / 1024).toFixed(2)} MB`);
             const optimized = await imageOptimizer.optimize(product.photoBlob);
             await this.products.update(id, {photoBlob: optimized});
-            !!optimized && console.log(`optimized size: ${(optimized?.size / 1024 / 1024).toFixed(2)} MB`);
         }
     }
 }

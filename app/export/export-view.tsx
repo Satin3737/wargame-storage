@@ -73,7 +73,7 @@ const ExportView: FC = () => {
                 disabled={busy || !products?.length}
                 suppressHydrationWarning
             >
-                {busy ? <Spinner size={20} /> : <FileXlsIcon size={20} />}
+                {busy ? <Spinner size={20} inverted={true} /> : <FileXlsIcon size={20} />}
                 {'Скачать XLSX'}
                 <DownloadSimpleIcon size={20} />
             </Button>
