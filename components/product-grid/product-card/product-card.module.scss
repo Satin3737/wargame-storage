@@ -4,7 +4,6 @@
 .card {
     display: grid;
     grid-template-columns: 64px 1fr auto auto;
-    align-items: center;
     gap: 12px;
     background: var(--c-shade-1);
     border: 1px solid var(--c-shade-2);
@@ -60,7 +59,6 @@
     line-height: 20px;
     font-weight: 600;
     color: var(--c-white);
-    @include h.cropTextToWidth(100%);
 }
 
 .meta {
@@ -97,6 +95,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    align-self: center;
 
     @include r.responsiveBelow(425px) {
         grid-column: 2 / -1;
@@ -122,6 +121,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    align-self: center;
     transition:
         background-color 0.15s ease,
         border-color 0.15s ease;

@@ -13,8 +13,8 @@ const initialFilter: IProductsFilter = {
     search: '',
     category: null,
     onlyOutOfStock: false,
-    sortKey: SortKey.name,
-    sortDir: SortDir.asc
+    sortKey: SortKey.createdAt,
+    sortDir: SortDir.desc
 };
 
 const ProductGrid: FC = () => {

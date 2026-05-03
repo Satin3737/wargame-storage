@@ -8,6 +8,7 @@ import type {IFilterBarProps} from './types';
 import styles from './filter-bar.module.scss';
 
 const sortOptions: Array<{value: ISortKey; label: string}> = [
+    {value: SortKey.createdAt, label: 'Дате'},
     {value: SortKey.name, label: 'Названию'},
     {value: SortKey.category, label: 'Категории'},
     {value: SortKey.qty, label: 'Количеству'},

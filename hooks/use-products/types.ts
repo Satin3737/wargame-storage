@@ -4,7 +4,8 @@ export const SortKey = {
     id: 'id',
     name: 'name',
     category: 'category',
-    qty: 'qty'
+    qty: 'qty',
+    createdAt: 'createdAt'
 } as const;
 
 export type ISortKey = (typeof SortKey)[keyof typeof SortKey];
