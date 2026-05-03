@@ -1,3 +1,5 @@
+@use '@/styles/helper' as h;
+
 .wrap {
     display: flex;
     flex-direction: column;
@@ -27,6 +29,12 @@
     &:focus-within {
         border-color: var(--c-primary);
         background: var(--c-accent-bg);
+    }
+
+    @include h.mediaHover {
+        &:not(:disabled):hover {
+            background: var(--c-shade-2);
+        }
     }
 
     &.invalid {
@@ -62,10 +70,19 @@
     }
 }
 
-.right {
+.delete {
     display: flex;
     align-items: center;
-    padding-right: 4px;
+    border: none;
+    background: none;
+
+    @include h.mediaHover {
+        &:not(:disabled):hover {
+            background: none;
+            color: var(--c-red);
+            transform: rotate(90deg);
+        }
+    }
 }
 
 .hint {

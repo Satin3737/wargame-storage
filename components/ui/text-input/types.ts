@@ -1,9 +1,9 @@
-import type {InputHTMLAttributes, ReactNode} from 'react';
+import type {InputHTMLAttributes} from 'react';
 
 export interface ITextInputProps extends InputHTMLAttributes<HTMLInputElement> {
     invalid?: boolean;
     label?: string;
     hint?: string;
     error?: string;
-    rightSlot?: ReactNode;
+    onDelete?: () => void;
 }

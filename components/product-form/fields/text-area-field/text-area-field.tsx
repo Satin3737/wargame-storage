@@ -17,6 +17,7 @@ const TextAreaField: FC<ITextAreaFieldProps> = ({label, hint, ...rest}) => {
             value={field.state.value ?? ''}
             onChange={e => field.handleChange(e.target.value)}
             onBlur={field.handleBlur}
+            onDelete={() => field.handleChange('')}
             error={errorText}
         />
     );

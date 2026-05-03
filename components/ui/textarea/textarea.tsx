@@ -1,11 +1,24 @@
 'use client';
 
+import {XIcon} from '@phosphor-icons/react';
 import clsx from 'clsx';
 import {type FC, useEffect, useRef} from 'react';
+import {IconBtnSize, IconButton} from '@/components';
 import type {ITextAreaProps} from './types';
 import styles from './textarea.module.scss';
 
-const TextArea: FC<ITextAreaProps> = ({invalid, label, hint, error, className, id, value, onInput, ...rest}) => {
+const TextArea: FC<ITextAreaProps> = ({
+    invalid,
+    label,
+    hint,
+    error,
+    className,
+    id,
+    value,
+    onInput,
+    onDelete,
+    ...rest
+}) => {
     const ref = useRef<HTMLTextAreaElement>(null);
 
     const resizeArea = (el: HTMLTextAreaElement) => {
@@ -39,6 +52,11 @@ const TextArea: FC<ITextAreaProps> = ({invalid, label, hint, error, className, i
                         onInput?.(e);
                     }}
                 />
+                {!!value && !!onDelete && (
+                    <IconButton size={IconBtnSize.sm} onClick={onDelete} className={styles.delete}>
+                        <XIcon />
+                    </IconButton>
+                )}
             </div>
             {error ? (
                 <div className={styles.error}>{error}</div>

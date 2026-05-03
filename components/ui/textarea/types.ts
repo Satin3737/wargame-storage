@@ -5,4 +5,5 @@ export interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaEleme
     label?: string;
     hint?: string;
     error?: string;
+    onDelete?: () => void;
 }
