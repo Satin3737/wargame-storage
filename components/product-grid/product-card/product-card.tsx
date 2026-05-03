@@ -46,11 +46,11 @@ const ProductCard: FC<IProductCardProps> = ({product, onPhotoClick}) => {
                 {!!barcode && <div className={styles.barcode}>{barcode}</div>}
             </div>
             <div className={styles.qtyBlock}>
-                <IconButton size={IconBtnSize.sm} onClick={() => adjust(-1)} aria-label={'decrement'}>
+                <IconButton onClick={() => adjust(-1)} aria-label={'decrement'}>
                     <MinusIcon size={16} />
                 </IconButton>
                 <span className={styles.qty}>{qty}</span>
-                <IconButton size={IconBtnSize.sm} onClick={() => adjust(1)} aria-label={'increment'}>
+                <IconButton onClick={() => adjust(1)} aria-label={'increment'}>
                     <PlusIcon size={16} />
                 </IconButton>
             </div>

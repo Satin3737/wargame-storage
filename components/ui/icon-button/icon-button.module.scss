@@ -20,6 +20,7 @@
         &:hover:not(:disabled) {
             background: var(--c-shade-2);
             border-color: var(--c-shade-3);
+            color: var(--c-primary);
         }
     }
 
