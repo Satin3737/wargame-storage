@@ -18,7 +18,7 @@ const PhotoField: FC<IPhotoFieldProps> = ({label = 'Фото'}) => {
 
     const handleFile = async (file: File | undefined) => {
         if (!file) return;
-        const optimizedFile = await imageOptimizer.optimize(file);
+        const optimizedFile = await imageOptimizer.optimize(file, 0.4);
         field.handleChange(optimizedFile);
     };
 
