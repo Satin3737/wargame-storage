@@ -36,7 +36,7 @@
     }
 
     @include h.mediaHover {
-        &:not(:disabled):hover {
+        &:hover:not(:disabled) {
             background: var(--c-shade-2);
         }
     }

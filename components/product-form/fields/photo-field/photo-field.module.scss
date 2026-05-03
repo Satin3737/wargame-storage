@@ -1,3 +1,5 @@
+@use '@/styles/helper' as h;
+
 .wrap {
     display: flex;
     flex-direction: column;
@@ -44,6 +46,12 @@
     position: absolute;
     left: -8px;
     bottom: -8px;
+
+    @include h.mediaHover {
+        &:hover:not(:disabled) {
+            color: var(--c-red);
+        }
+    }
 }
 
 .placeholder {

@@ -32,7 +32,7 @@
     }
 
     @include h.mediaHover {
-        &:not(:disabled):hover {
+        &:hover:not(:disabled) {
             background: var(--c-shade-2);
         }
     }
@@ -77,7 +77,7 @@
     background: none;
 
     @include h.mediaHover {
-        &:not(:disabled):hover {
+        &:hover:not(:disabled) {
             background: none;
             color: var(--c-red);
             transform: rotate(90deg);
