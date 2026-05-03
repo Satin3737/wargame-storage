@@ -2,6 +2,7 @@ import {ToastOptions, toast} from 'react-toastify';
 
 class ToastService {
     private readonly options: ToastOptions = {
+        theme: 'dark',
         autoClose: 1000,
         closeOnClick: true,
         closeButton: false,
