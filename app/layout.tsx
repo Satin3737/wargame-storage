@@ -1,4 +1,4 @@
-import type {Metadata} from 'next';
+import type {Metadata, Viewport} from 'next';
 import {Geist} from 'next/font/google';
 import type {ReactNode} from 'react';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +13,10 @@ const geistSans = Geist({
 export const metadata: Metadata = {
     title: 'Склад',
     description: 'Учёт настольных игр и миниатюр'
+};
+
+export const viewport: Viewport = {
+    themeColor: '#0f0f0f'
 };
 
 export default function RootLayout({children}: Readonly<{children: ReactNode}>) {
