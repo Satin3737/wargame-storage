@@ -38,15 +38,17 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
         validators: {onSubmit: productFormSchema},
         onSubmit: async ({value}) => {
             try {
-                if (!isCreate && initial) {
-                    await productsService.update(initial.id, {
-                        name: value.name.trim(),
-                        qty: value.qty,
-                        category: value.category,
-                        photoBlob: value.photoBlob,
-                        barcode: value.barcode?.trim() || null
-                    });
+                const {name, barcode, qty, ...rest} = value;
 
+                const data = {
+                    name: name.trim(),
+                    barcode: barcode?.trim() || null,
+                    qty,
+                    ...rest
+                };
+
+                if (!isCreate && initial) {
+                    await productsService.update(initial.id, data);
                     hapticsService.success();
                     toastService.success('Сохранено');
                     router.push('/');
@@ -54,29 +56,17 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                 }
 
                 if (linkedExistingId) {
-                    const merged = await productsService.mergeWithExisting(linkedExistingId, value.qty, {
-                        name: value.name.trim(),
-                        category: value.category,
-                        photoBlob: value.photoBlob,
-                        barcode: value.barcode?.trim() || null
-                    });
+                    const merged = await productsService.mergeWithExisting(linkedExistingId, qty, data);
 
                     if (merged) {
                         hapticsService.success();
-                        toastService.success(`+${value.qty} → ${merged.name}`);
+                        toastService.success(`+${qty} → ${merged.name}`);
                         router.push('/');
                         return;
                     }
                 }
 
-                await productsService.create({
-                    name: value.name.trim(),
-                    qty: value.qty,
-                    category: value.category,
-                    photoBlob: value.photoBlob,
-                    barcode: value.barcode?.trim() || null
-                });
-
+                await productsService.create(data);
                 hapticsService.success();
                 toastService.success('Товар добавлен');
                 router.push('/');
