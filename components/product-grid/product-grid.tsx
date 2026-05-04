@@ -53,7 +53,7 @@ const ProductGrid: FC = () => {
                     {products.map(p => (
                         <ProductCard key={p.id} product={p} onPhotoClick={setOpenPhoto} />
                     ))}
-                    <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+                    <Pagination page={page} totalPages={totalPages} setPage={setPage} className={styles.pagination} />
                 </div>
             )}
             <PhotoModal blob={openPhoto?.photoBlob ?? null} open={!!openPhoto} onClose={() => setOpenPhoto(null)} />

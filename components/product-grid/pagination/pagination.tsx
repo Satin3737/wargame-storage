@@ -1,21 +1,29 @@
 import {CaretDoubleLeftIcon, CaretDoubleRightIcon, CaretLeftIcon, CaretRightIcon} from '@phosphor-icons/react/ssr';
-import type {FC} from 'react';
-import {IconButton} from '@/components';
+import clsx from 'clsx';
+import type {ChangeEvent, FC} from 'react';
+import {IconButton, TextInput} from '@/components';
 import type {IPaginationProps} from './types';
 import styles from './pagination.module.scss';
 
-const Pagination: FC<IPaginationProps> = ({page, totalPages, setPage}) => {
+const Pagination: FC<IPaginationProps> = ({page, totalPages, setPage, className}) => {
     if (totalPages <= 1) return null;
 
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        let newPage = Number(e.target.value) || 1;
+        if (newPage < 1) newPage = 1;
+        if (newPage > totalPages) newPage = totalPages;
+        setPage(newPage);
+    };
+
     return (
-        <div className={styles.wrap}>
+        <div className={clsx(styles.wrap, className)}>
             <IconButton disabled={page === 1} onClick={() => setPage(1)} aria-label={'First page'}>
                 <CaretDoubleLeftIcon />
             </IconButton>
             <IconButton disabled={page === 1} onClick={() => setPage(page - 1)} aria-label={'Previous page'}>
                 <CaretLeftIcon />
             </IconButton>
-            <span className={styles.pageLabel}>{page}</span>
+            <TextInput value={page} onChange={handleChange} className={styles.pageInput} />
             <IconButton disabled={page === totalPages} onClick={() => setPage(page + 1)} aria-label={'Next page'}>
                 <CaretRightIcon />
             </IconButton>

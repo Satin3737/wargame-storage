@@ -1,3 +1,9 @@
+@use 'sass:string';
+
+@function alpha($color, $opacity) {
+    @return string.unquote('color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent)');
+}
+
 @mixin cropToLines($rows) {
     display: -webkit-box;
     -webkit-line-clamp: $rows;
