@@ -11,8 +11,10 @@ class ExportService {
             {header: 'Название', key: 'name', width: 40},
             {header: 'Количество', key: 'qty', width: 16},
             {header: 'Категория', key: 'category', width: 24},
-            {header: 'Фото', key: 'photo', width: 16},
-            {header: 'Штрихкод', key: 'barcode', width: 40},
+            {header: 'Уценка', key: 'isPriceReduction', width: 12},
+            {header: 'Б/у', key: 'isUsed', width: 12},
+            {header: 'Фото', key: 'photo', width: 12},
+            {header: 'Штрихкод', key: 'barcode', width: 24},
             {header: 'Обновлено', key: 'updated', width: 24},
             {header: 'ID', key: 'id', width: 40}
         ];
@@ -27,6 +29,8 @@ class ExportService {
                 name: product.name,
                 qty: product.qty,
                 category: CategoryLabel[product.category],
+                isPriceReduction: product.isPriceReduction ? 'Уценка' : '',
+                isUsed: product.isUsed ? 'Б/у' : '',
                 photo: '',
                 barcode: product.barcode,
                 updated: this.formatTimestamp(product.updatedAt),
@@ -41,7 +45,7 @@ class ExportService {
                 const rowNumber = row.number;
 
                 sheet.addImage(imageId, {
-                    tl: {col: 3.1, row: rowNumber - 1 + 0.1},
+                    tl: {col: 5.1, row: rowNumber - 1 + 0.1},
                     ext: {width: 80, height: 80}
                 });
             }
