@@ -5,11 +5,15 @@ export interface IFilterBarProps {
     search: string;
     category: ICategory | null;
     onlyOutOfStock: boolean;
+    isPriceReduction: boolean;
+    isUsed: boolean;
     sortKey: ISortKey;
     sortDir: ISortDir;
     onSearch: (value: string) => void;
     onCategory: (value: ICategory | null) => void;
     onOutOfStock: (value: boolean) => void;
+    onIsPriceReduction: (value: boolean) => void;
+    onIsUsed: (value: boolean) => void;
     onSortKey: (value: ISortKey) => void;
     onSortDir: (value: ISortDir) => void;
 }

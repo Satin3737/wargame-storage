@@ -49,3 +49,10 @@
         grid-area: sortDir;
     }
 }
+
+.checkboxes {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+}

@@ -24,11 +24,15 @@ const FilterBar: FC<IFilterBarProps> = ({
     search,
     category,
     onlyOutOfStock,
+    isPriceReduction,
+    isUsed,
     sortKey,
     sortDir,
     onSearch,
     onCategory,
     onOutOfStock,
+    onIsPriceReduction,
+    onIsUsed,
     onSortKey,
     onSortDir
 }) => (
@@ -62,11 +66,15 @@ const FilterBar: FC<IFilterBarProps> = ({
                 options={dirOptions}
             />
         </div>
-        <Checkbox
-            label={'Только нет в наличии'}
-            checked={onlyOutOfStock}
-            onChange={e => onOutOfStock(e.target.checked)}
-        />
+        <div className={styles.checkboxes}>
+            <Checkbox label={'Нет в наличии'} checked={onlyOutOfStock} onChange={e => onOutOfStock(e.target.checked)} />
+            <Checkbox
+                label={'Уценка'}
+                checked={isPriceReduction}
+                onChange={e => onIsPriceReduction(e.target.checked)}
+            />
+            <Checkbox label={'Б/у'} checked={isUsed} onChange={e => onIsUsed(e.target.checked)} />
+        </div>
     </div>
 );
 

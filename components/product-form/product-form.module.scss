@@ -1,6 +1,8 @@
+@use '@/styles/helper' as h;
 @use '@/styles/responsive' as r;
 
 .form {
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -46,8 +48,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    background: color-mix(in srgb, var(--c-primary) 10%, transparent);
-    border: 1px solid color-mix(in srgb, var(--c-primary) 30%, transparent);
+    background: h.alpha(var(--c-primary), 0.1);
+    border: 1px solid h.alpha(var(--c-primary), 0.3);
     border-radius: 12px;
     padding: 10px 14px;
     font-size: 14px;
@@ -60,9 +62,26 @@
     white-space: nowrap;
 }
 
+.checkboxRow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+
+    .label {
+        align-self: flex-start;
+    }
+}
+
+.checkbox {
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+
 .actions {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 12px;
-    margin-top: 4px;
+    margin-top: auto;
 }

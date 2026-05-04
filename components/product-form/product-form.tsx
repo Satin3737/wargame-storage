@@ -20,7 +20,9 @@ const buildDefault = (initial: IProduct | undefined): IProductFormValues => ({
     qty: initial?.qty ?? 1,
     category: initial?.category ?? storageService.get(StorageKeys.lastCategory) ?? Category.boardGames,
     photoBlob: initial?.photoBlob ?? null,
-    barcode: initial?.barcode ?? null
+    barcode: initial?.barcode ?? null,
+    isPriceReduction: initial?.isPriceReduction ?? false,
+    isUsed: initial?.isUsed ?? false
 });
 
 const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
@@ -223,6 +225,19 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
             <form.AppField name={'photoBlob'} validators={{onChange: productFormSchema.shape.photoBlob}}>
                 {field => <field.PhotoField />}
             </form.AppField>
+
+            <div className={styles.checkboxRow}>
+                <span className={styles.label}>{'Опции'}</span>
+                <form.AppField
+                    name={'isPriceReduction'}
+                    validators={{onChange: productFormSchema.shape.isPriceReduction}}
+                >
+                    {field => <field.CheckboxField label={'Уценка'} className={styles.checkbox} />}
+                </form.AppField>
+                <form.AppField name={'isUsed'} validators={{onChange: productFormSchema.shape.isUsed}}>
+                    {field => <field.CheckboxField label={'Б/у'} className={styles.checkbox} />}
+                </form.AppField>
+            </div>
 
             <div className={styles.actions}>
                 <Button variant={BtnVariant.ghost} size={BtnSize.lg} onClick={() => router.back()}>

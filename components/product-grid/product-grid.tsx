@@ -14,6 +14,8 @@ const initialFilter: IProductsFilter = {
     search: '',
     category: null,
     onlyOutOfStock: false,
+    isPriceReduction: false,
+    isUsed: false,
     sortKey: SortKey.createdAt,
     sortDir: SortDir.desc
 };
@@ -36,6 +38,8 @@ const ProductGrid: FC = () => {
                 onSearch={v => updateFilters(v, 'search')}
                 onCategory={v => updateFilters(v, 'category')}
                 onOutOfStock={v => updateFilters(v, 'onlyOutOfStock')}
+                onIsPriceReduction={v => updateFilters(v, 'isPriceReduction')}
+                onIsUsed={v => updateFilters(v, 'isUsed')}
                 onSortKey={v => updateFilters(v, 'sortKey')}
                 onSortDir={v => updateFilters(v, 'sortDir')}
             />

@@ -8,14 +8,14 @@ import {productsService} from '@/db';
 import {CategoryLabel} from '@/constants';
 import {hapticsService, toastService} from '@/services';
 import {useObjectUrl} from '@/hooks';
-import {IconButton} from '@/components';
+import {IconButton, Tag, TagTypes} from '@/components';
 import type {IProductCardProps} from './types';
 import styles from './product-card.module.scss';
 
 const initialAdjustment = {isPlus: false, isDown: false};
 
 const ProductCard: FC<IProductCardProps> = ({product, onPhotoClick}) => {
-    const {id, name, barcode, qty, category, photoBlob} = product;
+    const {id, name, barcode, qty, category, photoBlob, isPriceReduction, isUsed} = product;
     const thumb = useObjectUrl(photoBlob);
     const [isAdjusting, setIsAdjusting] = useState<boolean>(false);
     const [adjustment, setAdjustment] = useState<{isPlus: boolean; isDown: boolean}>(initialAdjustment);
@@ -75,7 +75,9 @@ const ProductCard: FC<IProductCardProps> = ({product, onPhotoClick}) => {
             <div className={styles.info}>
                 <div className={styles.name}>{name}</div>
                 <div className={styles.meta}>
-                    <span className={styles.category}>{CategoryLabel[category]}</span>
+                    <Tag label={CategoryLabel[category]} type={TagTypes.category} />
+                    {isPriceReduction && <Tag label={'Уценка'} type={TagTypes.priceReduction} />}
+                    {isUsed && <Tag label={'Б/у'} type={TagTypes.used} />}
                 </div>
                 {!!barcode && <div className={styles.barcode}>{barcode}</div>}
             </div>

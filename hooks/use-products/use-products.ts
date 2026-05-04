@@ -7,13 +7,16 @@ import {IProductsGridData, IUseProductsParams} from './types';
 
 const useProducts = ({filter, page, pageSize = 50}: IUseProductsParams): IProductsGridData | undefined => {
     return useLiveQuery<IProductsGridData>(async () => {
-        const {search, category, sortKey, sortDir, onlyOutOfStock} = filter;
+        const {search, category, sortKey, sortDir, onlyOutOfStock, isPriceReduction, isUsed} = filter;
         const all = await db.products.toArray();
         const searchTrimmed = search.trim().toLowerCase();
 
         const allProducts = all.filter(p => {
-            if (category && p.category !== category) return false;
+            if (!!category && p.category !== category) return false;
             if (onlyOutOfStock && p.qty !== 0) return false;
+            if (isPriceReduction && !p.isPriceReduction) return false;
+            if (isUsed && !p.isUsed) return false;
+
             return !(
                 searchTrimmed &&
                 !p.name.toLowerCase().includes(searchTrimmed) &&
