@@ -1,0 +1,31 @@
+@use '@/styles/helper' as h;
+
+.tag {
+    font-size: 10px;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    padding: 4px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+    color: var(--c-white);
+    background: h.alpha(var(--c-white), 0.1);
+}
+
+.category {
+    color: var(--c-green);
+    background: h.alpha(var(--c-green), 0.1);
+}
+
+.priceReduction {
+    color: var(--c-yellow);
+    background: h.alpha(var(--c-yellow), 0.1);
+}
+
+.used {
+    color: var(--c-red);
+    background: h.alpha(var(--c-red), 0.1);
+}

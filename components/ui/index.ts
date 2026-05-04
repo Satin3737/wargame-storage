@@ -5,5 +5,6 @@ export * from './icon-button';
 export * from './modal';
 export * from './select';
 export * from './spinner';
+export * from './tag';
 export * from './text-input';
 export * from './textarea';
