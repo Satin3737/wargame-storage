@@ -9,6 +9,7 @@
     border: 1px solid var(--c-shade-2);
     border-radius: 16px;
     padding: 12px;
+    position: relative;
     transition:
         border-color 0.15s ease,
         background-color 0.15s ease;
@@ -17,6 +18,53 @@
         &:hover {
             border-color: var(--c-shade-3);
         }
+    }
+}
+
+.outline {
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: -2px;
+    bottom: -2px;
+    border-radius: inherit;
+    pointer-events: none;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+
+    &.toPlus {
+        border-color: var(--c-green);
+        color: var(--c-green);
+
+        .plusIcon {
+            color: var(--c-green);
+        }
+    }
+
+    &.toMinus {
+        border-color: var(--c-red);
+        color: var(--c-red);
+
+        .minusIcon {
+            color: var(--c-red);
+        }
+    }
+
+    .plusIcon,
+    .minusIcon {
+        position: absolute;
+        color: transparent;
+        transition: color 0.3s ease;
+    }
+
+    .plusIcon {
+        top: -8px;
+        right: -8px;
+    }
+
+    .minusIcon {
+        bottom: -8px;
+        left: -8px;
     }
 }
 
