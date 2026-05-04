@@ -9,17 +9,8 @@
 
 .pageLabel {
     color: var(--c-white);
-    font-size: 14px;
-    min-width: 24px;
+    font-size: 20px;
+    font-weight: 500;
+    min-width: 64px;
     text-align: center;
-}
-
-.pageInput {
-    max-width: 100px;
-
-    input {
-        padding: 8px;
-        text-align: center;
-        min-height: 40px;
-    }
 }
