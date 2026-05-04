@@ -1,4 +1,4 @@
-import {CaretDownIcon} from '@phosphor-icons/react/dist/ssr';
+import {CaretDownIcon} from '@phosphor-icons/react/ssr';
 import clsx from 'clsx';
 import type {FC} from 'react';
 import type {ISelectProps} from './types';

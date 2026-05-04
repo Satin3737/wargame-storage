@@ -1,6 +1,6 @@
 'use client';
 
-import {CameraIcon, ImageIcon, TrashIcon} from '@phosphor-icons/react/dist/ssr';
+import {CameraIcon, ImageIcon, TrashIcon} from '@phosphor-icons/react/ssr';
 import {type FC, useRef} from 'react';
 import {imageOptimizer} from '@/services';
 import {useObjectUrl} from '@/hooks';

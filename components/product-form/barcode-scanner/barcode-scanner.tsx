@@ -1,6 +1,6 @@
 'use client';
 
-import {XIcon} from '@phosphor-icons/react/dist/ssr';
+import {XIcon} from '@phosphor-icons/react/ssr';
 import {BrowserMultiFormatReader, type IScannerControls} from '@zxing/browser';
 import {type FC, useEffect, useRef, useState} from 'react';
 import {hapticsService, toastService} from '@/services';

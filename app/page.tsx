@@ -1,4 +1,4 @@
-import {DownloadSimpleIcon, PlusIcon} from '@phosphor-icons/react/dist/ssr';
+import {DownloadSimpleIcon, PlusIcon} from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
 import {AppHeader, BtnSize, BtnVariant, Button, PageShell, ProductGrid} from '@/components';
 import styles from './page.module.scss';

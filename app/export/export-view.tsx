@@ -1,6 +1,6 @@
 'use client';
 
-import {DownloadSimpleIcon, FileXlsIcon, TrashIcon} from '@phosphor-icons/react/dist/ssr';
+import {DownloadSimpleIcon, FileXlsIcon, TrashIcon} from '@phosphor-icons/react/ssr';
 import {useRouter} from 'next/navigation';
 import {type FC, useState} from 'react';
 import {productsService} from '@/db';
