@@ -1,6 +1,8 @@
+@use '@/styles/helper' as h;
+
 .spinner {
     display: inline-block;
-    border: 2px solid color-mix(in srgb, var(--c-primary) 30%, transparent);
+    border: 2px solid h.alpha(var(--c-primary), 0.3);
     border-top-color: var(--c-primary);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;

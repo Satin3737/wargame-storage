@@ -7,7 +7,7 @@ const Checkbox: FC<ICheckboxProps> = ({label, className, ...rest}) => (
     <label className={clsx(styles.wrap, className)}>
         <input {...rest} type={'checkbox'} className={styles.input} />
         <span className={styles.box} aria-hidden={'true'} />
-        <span className={styles.label}>{label}</span>
+        {!!label && <span className={styles.label}>{label}</span>}
     </label>
 );
 

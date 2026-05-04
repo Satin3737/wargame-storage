@@ -55,7 +55,7 @@
 
     @include h.mediaHover {
         &:hover:not(:disabled) {
-            background: color-mix(in srgb, var(--c-primary) 88%, white);
+            background: h.alpha(var(--c-primary), 0.9);
         }
     }
 }
@@ -79,7 +79,7 @@
 
     @include h.mediaHover {
         &:hover:not(:disabled) {
-            background: color-mix(in srgb, var(--c-red) 12%, transparent);
+            background: h.alpha(var(--c-red), 0.1);
         }
     }
 }
