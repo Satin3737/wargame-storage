@@ -1,0 +1,22 @@
+@use '@/styles/helper' as h;
+
+.spinner,
+.notFound {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notFound {
+    color: var(--c-shade-4);
+    text-align: center;
+}
+
+.delete {
+    @include h.mediaHover {
+        &:hover:not(:disabled) {
+            color: var(--c-red);
+        }
+    }
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import {BarcodeIcon, FileSearchIcon, FloppyDiskIcon, TrashIcon, XIcon} from '@phosphor-icons/react/dist/ssr';
+import {BarcodeIcon, FileSearchIcon, FloppyDiskIcon, XIcon} from '@phosphor-icons/react/ssr';
 import clsx from 'clsx';
 import {useRouter} from 'next/navigation';
 import {type FC, useState} from 'react';
@@ -8,7 +8,7 @@ import {type IProduct, productsService} from '@/db';
 import {Category} from '@/constants';
 import {type IProductFormValues, productFormSchema} from '@/schemas';
 import {StorageKeys, hapticsService, storageService, toastService} from '@/services';
-import {BtnSize, BtnVariant, Button, ConfirmModal, IconButton} from '@/components';
+import {BtnSize, BtnVariant, Button, IconButton} from '@/components';
 import {BarcodeScanner} from './barcode-scanner';
 import {useAppForm} from './form-hook';
 import {SimilarProducts} from './similar-products';
@@ -31,8 +31,7 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
     const [linkedExistingId, setLinkedExistingId] = useState<string | null>(initial?.id ?? null);
     const [linkedName, setLinkedName] = useState<string | null>(initial?.name ?? null);
     const [linkedBarcode, setLinkedBarcode] = useState<string | null>(initial?.barcode ?? null);
-    const [deleting, setDeleting] = useState(false);
-    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+
     const isCreate = mode === ProductFormMode.create;
 
     const form = useAppForm({
@@ -91,22 +90,6 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
 
         toastService.info('Будет добавлено к существующему');
         hapticsService.tap();
-    };
-
-    const handleDelete = async () => {
-        if (!initial) return;
-        setDeleting(true);
-
-        try {
-            await productsService.remove(initial.id);
-            hapticsService.success();
-            toastService.success('Удалено');
-            router.push('/');
-        } catch {
-            setDeleting(false);
-            hapticsService.error();
-            toastService.error('Не удалось удалить');
-        }
     };
 
     const handleWebSearch = (barcode: string | null) => {
@@ -251,29 +234,6 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
                     </form.SubmitButton>
                 </form.AppForm>
             </div>
-
-            {!isCreate && (
-                <Button
-                    variant={BtnVariant.danger}
-                    size={BtnSize.lg}
-                    fullWidth
-                    onClick={() => setConfirmDeleteOpen(true)}
-                    disabled={deleting}
-                >
-                    <TrashIcon size={20} />
-                    {'Удалить товар'}
-                </Button>
-            )}
-
-            <ConfirmModal
-                open={confirmDeleteOpen}
-                message={`Удалить «${initial?.name}»?`}
-                onConfirm={() => {
-                    setConfirmDeleteOpen(false);
-                    void handleDelete();
-                }}
-                onCancel={() => setConfirmDeleteOpen(false)}
-            />
 
             <BarcodeScanner
                 open={scannerOpen}
