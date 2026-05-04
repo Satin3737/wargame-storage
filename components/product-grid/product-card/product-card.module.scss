@@ -30,7 +30,6 @@
     border-radius: inherit;
     pointer-events: none;
     border: 2px solid transparent;
-    transition: border-color 0.3s ease;
 
     &.toPlus {
         border-color: var(--c-green);
@@ -54,7 +53,6 @@
     .minusIcon {
         position: absolute;
         color: transparent;
-        transition: color 0.3s ease;
     }
 
     .plusIcon {

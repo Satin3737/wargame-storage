@@ -37,14 +37,14 @@ const ProductCard: FC<IProductCardProps> = ({product, onPhotoClick}) => {
             adjustmentTimeout.current = setTimeout(() => {
                 clearAdjustmentTimeout();
                 setAdjustment(initialAdjustment);
-            }, 1000);
+            }, 500);
 
             await productsService.incrementQty(product.id, delta);
             setIsAdjusting(false);
         } catch {
             setIsAdjusting(false);
             setAdjustment(initialAdjustment);
-            adjustmentTimeout.current = null;
+            clearAdjustmentTimeout();
             toastService.error('Не удалось обновить');
         }
     };
