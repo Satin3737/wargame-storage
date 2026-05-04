@@ -7,6 +7,8 @@ export interface IProduct {
     category: ICategory;
     photoBlob: Blob | null;
     barcode: string | null;
+    isPriceReduction: boolean;
+    isUsed: boolean;
     createdAt: number;
     updatedAt: number;
 }

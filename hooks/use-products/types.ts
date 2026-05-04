@@ -21,6 +21,8 @@ export type ISortDir = (typeof SortDir)[keyof typeof SortDir];
 export interface IProductsFilter {
     category: ICategory | null;
     onlyOutOfStock: boolean;
+    isPriceReduction: boolean;
+    isUsed: boolean;
     search: string;
     sortKey: ISortKey;
     sortDir: ISortDir;
