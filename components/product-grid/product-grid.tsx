@@ -2,9 +2,10 @@
 
 import {type FC, useState} from 'react';
 import type {IProduct} from '@/db';
-import {type IProductsFilter, SortDir, SortKey, useProducts} from '@/hooks';
+import {type IProductsFilter, type IProductsFilterKeys, SortDir, SortKey, useProducts} from '@/hooks';
 import {Spinner} from '@/components';
 import {FilterBar} from './filter-bar';
+import {Pagination} from './pagination';
 import {PhotoModal} from './photo-modal';
 import {ProductCard} from './product-card';
 import styles from './product-grid.module.scss';
@@ -18,19 +19,25 @@ const initialFilter: IProductsFilter = {
 };
 
 const ProductGrid: FC = () => {
+    const [page, setPage] = useState<number>(1);
     const [filter, setFilter] = useState<IProductsFilter>(initialFilter);
     const [openPhoto, setOpenPhoto] = useState<IProduct | null>(null);
-    const products = useProducts(filter);
+    const {products = [], totalPages = 1} = useProducts({page, filter}) ?? {};
+
+    const updateFilters = <T,>(value: T, key: IProductsFilterKeys) => {
+        setFilter(prev => ({...prev, [key]: value}));
+        setPage(1);
+    };
 
     return (
         <div className={styles.wrap}>
             <FilterBar
                 {...filter}
-                onSearch={v => setFilter(prev => ({...prev, search: v}))}
-                onCategory={v => setFilter(prev => ({...prev, category: v}))}
-                onOutOfStock={v => setFilter(prev => ({...prev, onlyOutOfStock: v}))}
-                onSortKey={v => setFilter(prev => ({...prev, sortKey: v}))}
-                onSortDir={v => setFilter(prev => ({...prev, sortDir: v}))}
+                onSearch={v => updateFilters(v, 'search')}
+                onCategory={v => updateFilters(v, 'category')}
+                onOutOfStock={v => updateFilters(v, 'onlyOutOfStock')}
+                onSortKey={v => updateFilters(v, 'sortKey')}
+                onSortDir={v => updateFilters(v, 'sortDir')}
             />
             {!products ? (
                 <div className={styles.empty}>
@@ -46,6 +53,7 @@ const ProductGrid: FC = () => {
                     {products.map(p => (
                         <ProductCard key={p.id} product={p} onPhotoClick={setOpenPhoto} />
                     ))}
+                    <Pagination page={page} totalPages={totalPages} onChange={setPage} />
                 </div>
             )}
             <PhotoModal blob={openPhoto?.photoBlob ?? null} open={!!openPhoto} onClose={() => setOpenPhoto(null)} />

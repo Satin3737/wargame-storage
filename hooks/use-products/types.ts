@@ -1,3 +1,4 @@
+import {IProduct} from '@/db';
 import type {ICategory} from '@/constants';
 
 export const SortKey = {
@@ -23,4 +24,17 @@ export interface IProductsFilter {
     search: string;
     sortKey: ISortKey;
     sortDir: ISortDir;
+}
+
+export type IProductsFilterKeys = keyof IProductsFilter;
+
+export interface IUseProductsParams {
+    filter: IProductsFilter;
+    page: number;
+    pageSize?: number;
+}
+
+export interface IProductsGridData {
+    products: IProduct[];
+    totalPages: number;
 }

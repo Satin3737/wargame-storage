@@ -1,2 +1,2 @@
-export {default} from './use-products';
-export {SortDir, SortKey, type IProductsFilter, type ISortDir, type ISortKey} from './types';
+export {default as useProducts} from './use-products';
+export * from './types';

@@ -1,29 +1,34 @@
 'use client';
 
 import {useLiveQuery} from 'dexie-react-hooks';
-import {type IProduct, db} from '@/db';
+import {db} from '@/db';
 import {compareProducts} from '@/helpers';
-import type {IProductsFilter} from './types';
+import {IProductsGridData, IUseProductsParams} from './types';
 
-const useProducts = (filter: IProductsFilter): IProduct[] | undefined =>
-    useLiveQuery(async () => {
+const useProducts = ({filter, page, pageSize = 50}: IUseProductsParams): IProductsGridData | undefined => {
+    return useLiveQuery<IProductsGridData>(async () => {
+        const {search, category, sortKey, sortDir, onlyOutOfStock} = filter;
         const all = await db.products.toArray();
-        const search = filter.search.trim().toLowerCase();
+        const searchTrimmed = search.trim().toLowerCase();
 
-        const filtered = all.filter(p => {
-            if (filter.category && p.category !== filter.category) return false;
-            if (filter.onlyOutOfStock && p.qty !== 0) return false;
+        const allProducts = all.filter(p => {
+            if (category && p.category !== category) return false;
+            if (onlyOutOfStock && p.qty !== 0) return false;
             return !(
-                search &&
-                !p.name.toLowerCase().includes(search) &&
-                !p.id.toLowerCase().includes(search) &&
-                !p.barcode?.toLowerCase().includes(search)
+                searchTrimmed &&
+                !p.name.toLowerCase().includes(searchTrimmed) &&
+                !p.id.toLowerCase().includes(searchTrimmed) &&
+                !p.barcode?.toLowerCase().includes(searchTrimmed)
             );
         });
 
-        filtered.sort((a, b) => compareProducts(a, b, filter.sortKey, filter.sortDir));
+        allProducts.sort((a, b) => compareProducts(a, b, sortKey, sortDir));
 
-        return filtered;
-    }, [filter.category, filter.onlyOutOfStock, filter.search, filter.sortKey, filter.sortDir]);
+        const totalPages = allProducts ? Math.ceil(allProducts.length / pageSize) : 0;
+        const products = allProducts ? allProducts.slice((page - 1) * pageSize, page * pageSize) : [];
+
+        return {products, totalPages};
+    }, [filter, page, pageSize]);
+};
 
 export default useProducts;
