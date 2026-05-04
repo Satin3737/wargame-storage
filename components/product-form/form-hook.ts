@@ -2,6 +2,7 @@
 
 import {createFormHook} from '@tanstack/react-form';
 import {CategoryField} from './fields/category-field';
+import {CheckboxField} from './fields/checkbox-field';
 import {NumberField} from './fields/number-field';
 import {PhotoField} from './fields/photo-field';
 import {SubmitButton} from './fields/submit-button';
@@ -17,7 +18,8 @@ export const {useAppForm} = createFormHook({
         TextAreaField,
         NumberField,
         CategoryField,
-        PhotoField
+        PhotoField,
+        CheckboxField
     },
     formComponents: {
         SubmitButton
