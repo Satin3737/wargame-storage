@@ -1,6 +1,6 @@
 'use client';
 
-import {type FC, useEffect, useState} from 'react';
+import {type FC, useEffect, useRef, useState} from 'react';
 import type {IProduct} from '@/db';
 import {useProducts} from '@/hooks';
 import {Spinner} from '@/components';
@@ -14,15 +14,21 @@ import styles from './product-grid.module.scss';
 const ProductGrid: FC = () => {
     const {filter, page, updateFilter, setPage} = useProductGridStore();
     const [openPhoto, setOpenPhoto] = useState<IProduct | null>(null);
-    const {products = [], totalPages = 1} = useProducts({page, filter}) ?? {};
+    const result = useProducts({page, filter});
+    const {products = [], totalPages = 1} = result ?? {};
+    const scrollRestored = useRef(false);
 
     useEffect(() => {
+        if (!result || scrollRestored.current) return;
         const {scrollY, setScrollY} = useProductGridStore.getState();
-        if (scrollY > 0) {
+        if (scrollY === 0) return;
+
+        scrollRestored.current = true;
+        requestAnimationFrame(() => {
             window.scrollTo({top: scrollY, behavior: 'instant'});
             setScrollY(0);
-        }
-    }, []);
+        });
+    }, [result]);
 
     return (
         <div className={styles.wrap}>
