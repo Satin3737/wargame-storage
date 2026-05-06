@@ -9,6 +9,7 @@ import {CategoryLabel} from '@/constants';
 import {hapticsService, toastService} from '@/services';
 import {useObjectUrl} from '@/hooks';
 import {IconButton, Tag, TagTypes} from '@/components';
+import {useProductGridStore} from '@/store';
 import type {IProductCardProps} from './types';
 import styles from './product-card.module.scss';
 
@@ -17,6 +18,7 @@ const initialAdjustment = {isPlus: false, isDown: false};
 const ProductCard: FC<IProductCardProps> = ({product, onPhotoClick}) => {
     const {id, name, barcode, qty, category, photoBlob, isPriceReduction, isUsed} = product;
     const thumb = useObjectUrl(photoBlob);
+    const setScrollY = useProductGridStore(s => s.setScrollY);
     const [isAdjusting, setIsAdjusting] = useState<boolean>(false);
     const [adjustment, setAdjustment] = useState<{isPlus: boolean; isDown: boolean}>(initialAdjustment);
     const adjustmentTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -90,7 +92,12 @@ const ProductCard: FC<IProductCardProps> = ({product, onPhotoClick}) => {
                     <PlusIcon size={16} />
                 </IconButton>
             </div>
-            <Link href={`/edit/${id}`} className={styles.editLink} aria-label={'edit'}>
+            <Link
+                href={`/edit/${id}`}
+                className={styles.editLink}
+                aria-label={'edit'}
+                onClick={() => setScrollY(window.scrollY)}
+            >
                 <PencilSimpleIcon size={16} />
             </Link>
         </article>

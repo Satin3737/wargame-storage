@@ -1,47 +1,40 @@
 'use client';
 
-import {type FC, useState} from 'react';
+import {type FC, useEffect, useState} from 'react';
 import type {IProduct} from '@/db';
-import {type IProductsFilter, type IProductsFilterKeys, SortDir, SortKey, useProducts} from '@/hooks';
+import {useProducts} from '@/hooks';
 import {Spinner} from '@/components';
+import {useProductGridStore} from '@/store';
 import {FilterBar} from './filter-bar';
 import {Pagination} from './pagination';
 import {PhotoModal} from './photo-modal';
 import {ProductCard} from './product-card';
 import styles from './product-grid.module.scss';
 
-const initialFilter: IProductsFilter = {
-    search: '',
-    category: null,
-    onlyOutOfStock: false,
-    isPriceReduction: false,
-    isUsed: false,
-    sortKey: SortKey.createdAt,
-    sortDir: SortDir.desc
-};
-
 const ProductGrid: FC = () => {
-    const [page, setPage] = useState<number>(1);
-    const [filter, setFilter] = useState<IProductsFilter>(initialFilter);
+    const {filter, page, updateFilter, setPage} = useProductGridStore();
     const [openPhoto, setOpenPhoto] = useState<IProduct | null>(null);
     const {products = [], totalPages = 1} = useProducts({page, filter}) ?? {};
 
-    const updateFilters = <T,>(value: T, key: IProductsFilterKeys) => {
-        setFilter(prev => ({...prev, [key]: value}));
-        setPage(1);
-    };
+    useEffect(() => {
+        const {scrollY, setScrollY} = useProductGridStore.getState();
+        if (scrollY > 0) {
+            window.scrollTo({top: scrollY, behavior: 'instant'});
+            setScrollY(0);
+        }
+    }, []);
 
     return (
         <div className={styles.wrap}>
             <FilterBar
                 {...filter}
-                onSearch={v => updateFilters(v, 'search')}
-                onCategory={v => updateFilters(v, 'category')}
-                onOutOfStock={v => updateFilters(v, 'onlyOutOfStock')}
-                onIsPriceReduction={v => updateFilters(v, 'isPriceReduction')}
-                onIsUsed={v => updateFilters(v, 'isUsed')}
-                onSortKey={v => updateFilters(v, 'sortKey')}
-                onSortDir={v => updateFilters(v, 'sortDir')}
+                onSearch={v => updateFilter('search', v)}
+                onCategory={v => updateFilter('category', v)}
+                onOutOfStock={v => updateFilter('onlyOutOfStock', v)}
+                onIsPriceReduction={v => updateFilter('isPriceReduction', v)}
+                onIsUsed={v => updateFilter('isUsed', v)}
+                onSortKey={v => updateFilter('sortKey', v)}
+                onSortDir={v => updateFilter('sortDir', v)}
             />
             {!products ? (
                 <div className={styles.empty}>
