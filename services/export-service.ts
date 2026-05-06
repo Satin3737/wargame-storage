@@ -2,7 +2,7 @@ import type {IProduct} from '@/db';
 import {CategoryLabel} from '@/constants';
 
 class ExportService {
-    public async exportXlsx(products: IProduct[]): Promise<void> {
+    public async exportXlsx(products: IProduct[], includePhotos = true): Promise<void> {
         const ExcelJS = await import('exceljs');
         const workbook = new ExcelJS.Workbook();
         const sheet = workbook.addWorksheet('Склад');
@@ -13,7 +13,7 @@ class ExportService {
             {header: 'Категория', key: 'category', width: 24},
             {header: 'Уценка', key: 'isPriceReduction', width: 12},
             {header: 'Б/у', key: 'isUsed', width: 12},
-            {header: 'Фото', key: 'photo', width: 12},
+            ...(includePhotos ? [{header: 'Фото', key: 'photo', width: 12}] : []),
             {header: 'Штрихкод', key: 'barcode', width: 24},
             {header: 'Обновлено', key: 'updated', width: 24},
             {header: 'ID', key: 'id', width: 40}
@@ -31,29 +31,31 @@ class ExportService {
                 category: CategoryLabel[product.category],
                 isPriceReduction: product.isPriceReduction ? 'Уценка' : '',
                 isUsed: product.isUsed ? 'Б/у' : '',
-                photo: '',
+                ...(includePhotos ? {photo: ''} : {}),
                 barcode: product.barcode,
                 updated: this.formatTimestamp(product.updatedAt),
                 id: product.id
             });
 
-            row.height = 64;
+            if (includePhotos) {
+                row.height = 64;
 
-            if (product.photoBlob) {
-                const normalized = await this.normalizePhoto(product.photoBlob);
-                const imageId = workbook.addImage(normalized);
-                const rowNumber = row.number;
+                if (product.photoBlob) {
+                    const normalized = await this.normalizePhoto(product.photoBlob);
+                    const imageId = workbook.addImage(normalized);
+                    const rowNumber = row.number;
 
-                sheet.addImage(imageId, {
-                    tl: {col: 5.1, row: rowNumber - 1 + 0.1},
-                    ext: {width: 80, height: 80}
-                });
+                    sheet.addImage(imageId, {
+                        tl: {col: 5.1, row: rowNumber - 1 + 0.1},
+                        ext: {width: 80, height: 80}
+                    });
+                }
             }
         }
 
         sheet.autoFilter = {
             from: {row: 1, column: 1},
-            to: {row: products.length + 1, column: 6}
+            to: {row: products.length + 1, column: includePhotos ? 6 : 5}
         };
 
         const buffer = await workbook.xlsx.writeBuffer();

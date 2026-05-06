@@ -17,7 +17,7 @@ const ExportView: FC = () => {
     const products = useAllProducts();
     const totalQty = products?.reduce((s, p) => s + p.qty, 0) ?? 0;
 
-    const handleExport = async () => {
+    const handleExport = async (includePhotos: boolean) => {
         if (!products?.length) {
             toastService.info('Список пуст');
             return;
@@ -26,7 +26,7 @@ const ExportView: FC = () => {
         setBusy(true);
 
         try {
-            await exportService.exportXlsx(products);
+            await exportService.exportXlsx(products, includePhotos);
             hapticsService.success();
             toastService.success('Файл готов');
         } catch {
@@ -69,12 +69,24 @@ const ExportView: FC = () => {
                 variant={BtnVariant.primary}
                 size={BtnSize.lg}
                 fullWidth
-                onClick={handleExport}
+                onClick={() => void handleExport(true)}
                 disabled={busy || !products?.length}
                 suppressHydrationWarning
             >
                 {busy ? <Spinner size={20} inverted={true} /> : <FileXlsIcon size={20} />}
-                {'Скачать XLSX'}
+                {'Скачать'}
+                <DownloadSimpleIcon size={20} />
+            </Button>
+            <Button
+                variant={BtnVariant.primary}
+                size={BtnSize.lg}
+                fullWidth
+                onClick={() => void handleExport(false)}
+                disabled={busy || !products?.length}
+                suppressHydrationWarning
+            >
+                {busy ? <Spinner size={20} inverted={true} /> : <FileXlsIcon size={20} />}
+                {'Скачать (без фото)'}
                 <DownloadSimpleIcon size={20} />
             </Button>
             <Button
