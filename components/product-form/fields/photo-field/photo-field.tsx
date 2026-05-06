@@ -2,8 +2,6 @@
 
 import {CameraIcon, ImageIcon, TrashIcon} from '@phosphor-icons/react/ssr';
 import {type FC, useRef} from 'react';
-import {flushSync} from 'react-dom';
-import {imageOptimizer} from '@/services';
 import {useObjectUrl} from '@/hooks';
 import {BtnVariant, Button, IconButton} from '@/components';
 import {useFieldContext} from '../../form-context';
@@ -17,10 +15,9 @@ const PhotoField: FC<IPhotoFieldProps> = ({label = 'Фото'}) => {
     const galleryRef = useRef<HTMLInputElement>(null);
     const previewUrl = useObjectUrl(blob);
 
-    const handleFile = async (file: File | undefined) => {
+    const handleFile = (file: File | undefined) => {
         if (!file) return;
-        const optimizedFile = await imageOptimizer.optimize(file, 0.4);
-        flushSync(() => field.handleChange(optimizedFile));
+        field.handleChange(file);
     };
 
     return (

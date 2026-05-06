@@ -7,7 +7,7 @@ import {type FC, useState} from 'react';
 import {type IProduct, productsService} from '@/db';
 import {Category} from '@/constants';
 import {type IProductFormValues, productFormSchema} from '@/schemas';
-import {StorageKeys, hapticsService, storageService, toastService} from '@/services';
+import {StorageKeys, hapticsService, imageOptimizer, storageService, toastService} from '@/services';
 import {BtnSize, BtnVariant, Button, IconButton} from '@/components';
 import {BarcodeScanner} from './barcode-scanner';
 import {useAppForm} from './form-hook';
@@ -39,12 +39,16 @@ const ProductForm: FC<IProductFormProps> = ({mode, initial}) => {
         validators: {onSubmit: productFormSchema},
         onSubmit: async ({value}) => {
             try {
-                const {name, barcode, qty, ...rest} = value;
+                const {name, barcode, qty, photoBlob, ...rest} = value;
+
+                const optimizedPhoto =
+                    isCreate && photoBlob ? ((await imageOptimizer.optimize(photoBlob, 0.4)) ?? photoBlob) : photoBlob;
 
                 const data = {
                     name: name.trim(),
                     barcode: barcode?.trim() || null,
                     qty,
+                    photoBlob: optimizedPhoto,
                     ...rest
                 };
 
