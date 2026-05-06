@@ -41,6 +41,7 @@ const FilterBar: FC<IFilterBarProps> = ({
             placeholder={'Поиск по названию или штрихкоду...'}
             value={search}
             onChange={e => onSearch(e.target.value)}
+            onDelete={() => onSearch('')}
             className={styles.search}
         />
         <div className={styles.row}>
