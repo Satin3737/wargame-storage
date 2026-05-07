@@ -26,7 +26,7 @@
 
 .item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     width: 100%;
     background: transparent;
@@ -82,7 +82,21 @@
     white-space: nowrap;
 }
 
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
 .meta {
     font-size: 12px;
     color: var(--c-shade-4);
+}
+
+.tags {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }

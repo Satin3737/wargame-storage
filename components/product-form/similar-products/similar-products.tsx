@@ -3,6 +3,7 @@
 import type {FC} from 'react';
 import {CategoryLabel} from '@/constants';
 import {useObjectUrl, useSimilarProducts} from '@/hooks';
+import {Tag, TagTypes} from '@/components';
 import type {ISimilarItemProps, ISimilarProductsProps} from './types';
 import styles from './similar-products.module.scss';
 
@@ -15,12 +16,18 @@ const SimilarItem: FC<ISimilarItemProps> = ({product, onPick}) => {
                 <span className={styles.thumb}>{!!url && <img src={url} alt={''} />}</span>
                 <span className={styles.info}>
                     <span className={styles.name}>{product.name}</span>
-                    <span className={styles.meta}>
-                        {CategoryLabel[product.category]}
-                        {' • '}
-                        {product.qty}
-                        {' шт.'}
-                    </span>
+                    <div className={styles.row}>
+                        <div className={styles.meta}>
+                            {CategoryLabel[product.category]}
+                            {' • '}
+                            {product.qty}
+                            {' шт.'}
+                        </div>
+                        <div className={styles.tags}>
+                            {product.isUsed && <Tag label={'Б/у'} type={TagTypes.used} />}
+                            {product.isPriceReduction && <Tag label={'Уценка'} type={TagTypes.priceReduction} />}
+                        </div>
+                    </div>
                 </span>
             </button>
         </li>
