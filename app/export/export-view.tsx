@@ -1,6 +1,7 @@
 'use client';
 
-import {DownloadSimpleIcon, FileXlsIcon, TrashIcon} from '@phosphor-icons/react/ssr';
+import {ArrowRightIcon, DownloadSimpleIcon, FileXlsIcon, TrashIcon} from '@phosphor-icons/react';
+import clsx from 'clsx';
 import {useRouter} from 'next/navigation';
 import {type FC, useState} from 'react';
 import {productsService} from '@/db';
@@ -13,6 +14,7 @@ const ExportView: FC = () => {
     const router = useRouter();
     const [busy, setBusy] = useState(false);
     const [clearing, setClearing] = useState(false);
+    const [isClearOpened, setIsClearOpened] = useState(false);
     const [confirmClearOpen, setConfirmClearOpen] = useState(false);
     const products = useAllProducts();
     const totalQty = products?.reduce((s, p) => s + p.qty, 0) ?? 0;
@@ -89,17 +91,31 @@ const ExportView: FC = () => {
                 {'Скачать (без фото)'}
                 <DownloadSimpleIcon size={20} />
             </Button>
-            <Button
-                variant={BtnVariant.danger}
-                size={BtnSize.lg}
-                fullWidth
-                onClick={() => setConfirmClearOpen(true)}
-                disabled={clearing || !products?.length}
-                suppressHydrationWarning
-            >
-                <TrashIcon size={20} />
-                {'Очистить весь склад'}
-            </Button>
+            <div className={clsx(styles.clearWrap, {[styles.opened]: isClearOpened})}>
+                <Button
+                    className={styles.open}
+                    variant={BtnVariant.ghost}
+                    onClick={() => setIsClearOpened(state => !state)}
+                    title={'Переключить кнопку очистки'}
+                    aria-label={'Переключить кнопку очистки'}
+                    suppressHydrationWarning
+                >
+                    <ArrowRightIcon size={24} />
+                </Button>
+                {isClearOpened && (
+                    <Button
+                        variant={BtnVariant.danger}
+                        size={BtnSize.lg}
+                        className={styles.clear}
+                        onClick={() => setConfirmClearOpen(true)}
+                        disabled={clearing || !products?.length}
+                        suppressHydrationWarning
+                    >
+                        {'Очистить склад'}
+                        <TrashIcon size={24} />
+                    </Button>
+                )}
+            </div>
             <ConfirmModal
                 open={confirmClearOpen}
                 message={'Удалить все товары без возможности восстановления?'}

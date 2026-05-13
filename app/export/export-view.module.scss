@@ -1,3 +1,5 @@
+@use '@/styles/responsive' as r;
+
 .wrap {
     display: flex;
     flex-direction: column;
@@ -32,4 +34,52 @@
     margin-top: 4px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.clearWrap {
+    position: fixed;
+    left: 8px;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    @include r.responsiveBelowHeight(700px) {
+        bottom: 24px;
+        top: unset;
+    }
+}
+
+.open {
+    padding: 4px;
+    width: 32px;
+    height: 200px;
+
+    svg {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .opened & {
+        svg {
+            transform: rotateY(180deg);
+        }
+    }
+}
+
+.clear {
+    width: fit-content;
+    white-space: nowrap;
+    position: absolute;
+    left: 56px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &:active:not(:disabled) {
+        transform: scale(0.97) translateY(-50%);
+    }
+
+    @starting-style {
+        opacity: 0;
+        transform: translate(-100%, -50%);
+    }
 }
